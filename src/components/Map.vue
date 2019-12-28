@@ -64,7 +64,7 @@ export default {
 	},
 	data() {
 		return {
-			accessToken: process.env.MAPBOX_ACCESS_TOKEN,
+			accessToken: process.env.VUE_APP_MAPBOX_ACCESS_TOKEN,
 			defaultZoom: 11,
 			mapCenter: [103.819839, 1.352083],
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
@@ -137,7 +137,6 @@ export default {
 				marker: false,
 			});
 			// this.$refs.mapSearch.appendChild(this.geocoder.onAdd(this.map));
-			this.$refs.footer.appendChild(this.geocoder.onAdd(this.map));
 
 			let $this = this;
 			this.geocoder.on('result', function() {
