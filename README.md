@@ -1,4 +1,4 @@
-SG MotoParker
+SG MotoParker [![Netlify Status](https://api.netlify.com/api/v1/badges/b92f8145-72e2-449d-8dea-4d2bcb86b988/deploy-status)](https://app.netlify.com/sites/motoparker/deploys)
 ===============
 
 Parking in Singapore can be expensive. But it can also be cheaper, or even free. And sometimes it can also be additionally expensive when you get a parking summons for illegal parking. As a motorcyclist myself, I don't always know which carparks can be parked at and sometimes there are locations where LTA or Traffic Police offers don't issue summons. 
