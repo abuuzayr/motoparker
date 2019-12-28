@@ -64,7 +64,7 @@ export default {
 	},
 	data() {
 		return {
-			accessToken: 'pk.eyJ1IjoiYWJ1dXpheXIiLCJhIjoiY2s0bnh0cWd5MThxcDNqbDVpMzFrY2F1dyJ9.TBXHnNJ4E86jU4EnNK2oTw',
+			accessToken: process.env.MAPBOX_ACCESS_TOKEN,
 			defaultZoom: 11,
 			mapCenter: [103.819839, 1.352083],
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
