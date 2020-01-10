@@ -13,8 +13,13 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.5.1",
+    "body-parser": "^1.19.0",
     "core-js": "^3.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "mapbox-gl": "^1.6.1",
+    "mongoose": "^5.8.6",
     "vue": "^2.6.10",
     "vue-feather-icons": "^5.0.0",
     "vue-mapbox": "^0.4.1"
@@ -45,5 +50,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "proxy": "http://localhost:8000"
 }
