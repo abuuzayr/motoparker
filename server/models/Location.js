@@ -8,7 +8,8 @@ const LocationSchema = mongoose.Schema({
     hdb: Boolean,
     free: Boolean,
     lat: Number,
-    lng: Number
+    lng: Number,
+    active: { type: Boolean, default: true }
 }, {
     timestamps: true
 });
