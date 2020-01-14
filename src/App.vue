@@ -22,6 +22,7 @@ export default {
 
 body {
   margin: 0;
+  --gray: #2c3e50;
 }
 
 #app {
@@ -29,7 +30,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--gray);
   margin-top: 50px;
 }
 </style>
