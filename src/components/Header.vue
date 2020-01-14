@@ -1,22 +1,36 @@
 <template>
   <header>
       <div class="left">
-        <compass-icon size="1.3x" class="icon"></compass-icon>
+        <font-awesome-icon icon="motorcycle" size="2x" class="icon"/>
         <h2>Motoparker</h2>
       </div>
       <div class="right">
         <a href="#" class="login" v-on:click="login">Sign In</a>
+        <a href="https://github.com/abuuzayr/motoparker" target="_blank">
+          <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
+        </a>
       </div>
   </header>
 </template>
 
 <script>
-import { CompassIcon } from 'vue-feather-icons'
+import Vue from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faMotorcycle } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(
+  faGithub,
+  faMotorcycle
+)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 export default {
   name: 'Header',
   components: {
-      CompassIcon
+      FontAwesomeIcon
   },
   methods: {
       login: function () {
@@ -42,11 +56,15 @@ header {
 }
 
 header .icon {
-    color: #000;
-    margin-right: 10px;
+    color: var(--gray);
+    margin: 0 10px;
+    vertical-align: middle;
 }
 
-header .left > * {
-    display: inline-block;
+header .left,
+header .right {
+    display: flex;
+    align-items: center;
 }
+
 </style>
