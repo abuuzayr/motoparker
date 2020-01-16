@@ -14,7 +14,7 @@
 		<MglMarker
 			v-for="marker in locations"
 			:coordinates="[marker.lng, marker.lat]"
-			:draggable="true"
+			:draggable="false"
 			:color.sync="markerColor"
 			:markerId="marker._id"
 			:key="marker._id"
