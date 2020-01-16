@@ -27,7 +27,8 @@
     "mongoose": "^5.8.6",
     "node-cron": "^2.0.3",
     "vue": "^2.6.10",
-    "vue-mapbox": "^0.4.1"
+    "vue-mapbox": "^0.4.1",
+    "vue2-slideout-panel": "^2.8.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
