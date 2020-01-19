@@ -14,7 +14,7 @@
 		<MglMarker
 			v-for="marker in locations"
 			:coordinates="[marker.lng, marker.lat]"
-			:draggable="true"
+			:draggable="false"
 			:color.sync="markerColor"
 			:markerId="marker._id"
 			:key="marker._id"
@@ -84,8 +84,12 @@ export default {
 		async markerClicked(event) {
 			let markerId = event.component.$attrs.markerId
 			this.selectedMarker = markerId
-			
-			await this.map.flyTo({ center: [103.946728268616, 1.33213553610024], zoom: 15 })
+
+			this.$store.dispatch('setLocation', markerId)
+
+			let location = this.locations.filter(location => location._id === markerId)[0]
+
+			await this.map.flyTo({ center: [location.lng, location.lat], zoom: 15 })
 		},
 	},
 	created() {

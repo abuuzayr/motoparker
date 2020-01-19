@@ -27,7 +27,8 @@
     "mongoose": "^5.8.6",
     "node-cron": "^2.0.3",
     "vue": "^2.6.10",
-    "vue-mapbox": "^0.4.1"
+    "vue-mapbox": "^0.4.1",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
@@ -36,7 +37,8 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vue2-slideout-panel": "^2.8.0"
   },
   "eslintConfig": {
     "root": true,
