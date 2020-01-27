@@ -5,6 +5,12 @@
         <h2>Motoparker</h2>
       </div>
       <div class="right">
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="toggleFilter('hdb')" v-if="filter === 'hdb'"/>
+        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="toggleFilter('hdb')" v-else/>
+        HDB/URA
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="toggleFilter('free')" v-if="filter === 'free'"/>
+        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="toggleFilter('free')" v-else/>
+        Free only
         <a href="#" class="login" v-on:click="login">Sign In</a>
         <a href="https://github.com/abuuzayr/motoparker" target="_blank">
           <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
@@ -16,13 +22,15 @@
 <script>
 import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMotorcycle } from '@fortawesome/free-solid-svg-icons'
+import { faMotorcycle, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
   faGithub,
-  faMotorcycle
+  faMotorcycle,
+  faToggleOn,
+  faToggleOff
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -32,9 +40,17 @@ export default {
   components: {
       FontAwesomeIcon
   },
+  data() {
+    return {
+      filter: null
+    }
+  },
   methods: {
       login: function () {
           alert('Login')
+      },
+      toggleFilter: function (filter) {
+        this.filter = this.filter === filter ? null : filter
       }
   }
 }
@@ -65,6 +81,21 @@ header .left,
 header .right {
     display: flex;
     align-items: center;
+}
+
+.login {
+  border: 2px solid var(--gray);
+  padding: 3px 5px;
+  margin: 0 5px 0 15px;
+  text-decoration: none;
+  color: #fff;
+  background: var(--gray);
+  font-weight: bold;
+}
+
+.login:hover {
+  color: var(--gray);
+  background: #fff;
 }
 
 </style>
