@@ -5,12 +5,12 @@
         <h2>Motoparker</h2>
       </div>
       <div class="right">
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="toggleFilter('hdb')" v-if="filter === 'hdb'"/>
-        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="toggleFilter('hdb')" v-else/>
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('hdb')" v-if="this.$store.state.filters.includes('hdb')"/>
+        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('hdb')" v-else/>
         HDB/URA
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="toggleFilter('free')" v-if="filter === 'free'"/>
-        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="toggleFilter('free')" v-else/>
-        Free only
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
+        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
+        Free
         <a href="#" class="login" v-on:click="login">Sign In</a>
         <a href="https://github.com/abuuzayr/motoparker" target="_blank">
           <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
@@ -49,9 +49,12 @@ export default {
       login: function () {
           alert('Login')
       },
-      toggleFilter: function (filter) {
-        this.filter = this.filter === filter ? null : filter
-      }
+      addFilter: function (filter) {
+        this.$store.dispatch('addFilter', filter)
+      },
+      removeFilter: function (filter) {
+        this.$store.dispatch('removeFilter', filter)
+      },
   }
 }
 </script>
