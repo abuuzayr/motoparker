@@ -52,15 +52,12 @@ export default {
 			markerColor: 'blue',
 			counter: 0,
 			selectedMarker: null,
-			payload: [],
-			address: '',
 			locations: []
 		};
 	},
 	methods: {
 		onMapLoaded(event) {
 			this.map = event.map;
-			this.addMarkers();
 		},
 		itemClicked(index) {
 			this.$refs['markers'][index].togglePopup();
@@ -74,12 +71,6 @@ export default {
 			this.$nextTick(() => {
 				this.map.panTo(this.$refs['markers'][index].coordinates);
 			});
-		},
-		addMarkers() {
-			this.payload = this.locations;
-		},
-		removeMarkers() {
-			this.payload = [];
 		},
 		async markerClicked(event) {
 			const markerId = event.component.$attrs.markerId
