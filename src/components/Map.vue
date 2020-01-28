@@ -15,7 +15,7 @@
 			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
 			:draggable="false"
-			:color.sync="markerColor"
+			:color="getMarkerColor(marker)"
 			:markerId="marker._id"
 			:key="marker._id"
 			@click="markerClicked"
@@ -109,6 +109,13 @@ export default {
 				zoom: currentZoom < 15 ? 15 : currentZoom
 			})
 		},
+		getMarkerColor(location) {
+			return location.hdb || location.ura ? 
+				'red' : 
+				location.free ? 
+					'green' : 
+					this.markerColor
+		}
 	},
 	created() {
 		this.map = null;
