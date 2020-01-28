@@ -12,7 +12,7 @@
 		<MglNavigationControl :showZoom="true" :showCompass="false" />
 		<MglGeolocateControl position="top-right" />
 		<MglMarker
-			v-for="marker in locations"
+			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
 			:draggable="false"
 			:color.sync="markerColor"
@@ -54,6 +54,28 @@ export default {
 			selectedMarker: null,
 			locations: []
 		};
+	},
+	computed: {
+		filteredLocations: function () {
+			// filter active locations
+			let filtered = this.locations.filter(location => {
+				return location.active
+			})
+			// filter based on filters
+			// -> HDB / URA
+			if (this.$store.state.filters.includes('gov')) {
+				filtered = filtered.filter(location => {
+					return location.ura || location.hdb
+				})
+			}
+			// -> free
+			if (this.$store.state.filters.includes('free')) {
+				filtered = filtered.filter(location => {
+					return location.free
+				})
+			}
+			return filtered
+		}
 	},
 	methods: {
 		onMapLoaded(event) {
