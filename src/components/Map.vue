@@ -111,9 +111,9 @@ export default {
 		},
 		getMarkerColor(location) {
 			return location.hdb || location.ura ? 
-				'red' : 
+				'var(--red)' : 
 				location.free ? 
-					'green' : 
+					'var(--green)' : 
 					this.markerColor
 		}
 	},
