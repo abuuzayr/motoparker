@@ -82,14 +82,19 @@ export default {
 			this.payload = [];
 		},
 		async markerClicked(event) {
-			let markerId = event.component.$attrs.markerId
+			const markerId = event.component.$attrs.markerId
 			this.selectedMarker = markerId
 
 			this.$store.dispatch('setLocation', markerId)
 
-			let location = this.locations.filter(location => location._id === markerId)[0]
+			const location = this.locations.filter(location => location._id === markerId)[0]
 
-			await this.map.flyTo({ center: [location.lng, location.lat], zoom: 15 })
+			const currentZoom = this.map.getZoom()
+
+			await this.map.flyTo({ 
+				center: [location.lng, location.lat], 
+				zoom: currentZoom < 15 ? 15 : currentZoom
+			})
 		},
 	},
 	created() {
