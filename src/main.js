@@ -11,7 +11,7 @@ Vue.use(VueSlideoutPanel);
 const store = new Vuex.Store({
   state: {
     location: null,
-    filters: []
+    filters: ['free']
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
