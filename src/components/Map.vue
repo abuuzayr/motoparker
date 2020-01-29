@@ -62,18 +62,18 @@ export default {
 				return location.active
 			})
 			// filter based on filters
-			// -> HDB / URA
-			if (this.$store.state.filters.includes('gov')) {
-				filtered = filtered.filter(location => {
-					return location.ura || location.hdb
-				})
-			}
+			// -> HDB
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('hdb') ? location.hdb : !location.hdb
+			})
+			// -> URA
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('ura') ? location.ura : !location.ura
+			})
 			// -> free
-			if (this.$store.state.filters.includes('free')) {
-				filtered = filtered.filter(location => {
-					return location.free
-				})
-			}
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('free') ? location.free : !location.free
+			})
 			return filtered
 		}
 	},
@@ -110,11 +110,10 @@ export default {
 			})
 		},
 		getMarkerColor(location) {
-			return location.hdb || location.ura ? 
-				'var(--red)' : 
-				location.free ? 
-					'var(--green)' : 
-					this.markerColor
+			if (location.hdb) return 'var(--orange)'
+			if (location.ura) return 'var(--red)'
+			if (location.free) return 'var(--green)'
+			return this.markerColor
 		}
 	},
 	created() {
