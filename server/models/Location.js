@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const LocationSchema = mongoose.Schema({
     name: { type: String, required: true },
+    description: { type: String },
     directions: { type: String },
     charges: { type: String },
     ura: { type: Boolean, default: false },
