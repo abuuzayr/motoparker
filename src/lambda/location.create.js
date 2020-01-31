@@ -1,6 +1,3 @@
-// productCreate.js
-import mongoose from 'mongoose'
-
 // Load the Location Model
 import Location from './locationModel'
 
