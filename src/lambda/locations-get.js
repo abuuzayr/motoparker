@@ -9,9 +9,7 @@ exports.handler = async (event, context, callback) => {
     // context.callbackWaitsForEmptyEventLoop = false
 
     try {
-        console.log("locations1: ")
         const locations = await Location.find({ active: true })
-        console.log("locations2: ", locations)
         callback(null, {
             statusCode: 200,
             body: JSON.stringify({ 'locations': locations })
