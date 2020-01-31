@@ -53,7 +53,7 @@ export default {
   },
   async mounted() {
     if (this.location) {
-      const response = await axios.get(`/location/${this.location}`)
+      const response = await axios.get(`/.netlify/functions/location-get?id=${this.location}`)
       this.data = response.data.location
     }
   }
