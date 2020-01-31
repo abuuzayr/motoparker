@@ -3,7 +3,7 @@ const Location = require('../models/Location')
 // Declare routes
 
 module.exports = function (app) {
-    app.post('/location/:id', postLocation)
+    app.post('/location', postLocation)
     app.get('/location/:id', getLocation)
     app.get('/locations', getAllLocations)
 }
@@ -11,16 +11,66 @@ module.exports = function (app) {
 // Methods
 
 const postLocation = async (req, res) => {
-    const location = req.params.id ? 
-        await Location.findByIdAndUpdate(req.params.id, req.body) : 
-        new Location(req.body)
-    location.save()
-        .then(location => {
-            res.status(200).json({ 'message': `Location successfully ${req.params.id ? 'updated' : 'added'}` });
-        })
-        .catch(err => {
-            res.status(400).send("Error when saving to database");
-        });
+    const locations = Array.isArray(req.body) ? req.body : [req.body]
+    const existingLocations = locations.filter(location => location.hasOwnProperty('id'))
+    const newLocations = locations.filter(location => !location.hasOwnProperty('id'))
+    const success = []
+    const errored = []
+    // Handle existing locations
+    try {
+        await Promise.all(existingLocations.map(async location => {
+            const updatedLocation = await Location.findOneAndUpdate(
+                { _id: location.id }, 
+                location
+            )
+            await updatedLocation.save(
+                (err, location) => {
+                    if (err) {
+                        errored.push({
+                            name: location.name,
+                            message: err.message
+                        })
+                    } else {
+                        success.push(location.name)
+                    }
+                }
+            )
+            if (newLocations.length === 0) {
+                res.status(200).send({
+                    'success': success.join(', '),
+                    'errors': errored.join(', ')
+                })
+            }
+        }))
+    } catch (e) {
+        res.status(400).send("Error when saving to database");
+    }
+    // Bulk create new locations
+    try {
+        await Location.create(
+            newLocations,
+            (err, locations) => {
+                if (err) {
+                    newLocations.forEach(location => {
+                        errored.push(JSON.stringify({
+                            name: location.name,
+                            message: err.message
+                        }))
+                    })
+                } else {
+                    locations.forEach(location => {
+                        success.push(location.name)
+                    })
+                }
+                res.status(200).send({ 
+                    'success': success.join(', '), 
+                    'errors': errored.join(', ') 
+                })
+            }
+        )
+    } catch (e) {
+        res.status(400).send("Error when saving to database");
+    }
 }
 
 const getLocation = async (req, res) => {

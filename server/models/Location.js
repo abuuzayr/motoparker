@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
 const LocationSchema = mongoose.Schema({
-    name: String,
-    directions: String,
-    charges: String,
-    ura: Boolean,
-    hdb: Boolean,
-    free: Boolean,
-    lat: Number,
-    lng: Number,
+    name: { type: String, required: true },
+    description: { type: String },
+    directions: { type: String },
+    charges: { type: String },
+    ura: { type: Boolean, default: false },
+    hdb: { type: Boolean, default: false },
+    free: { type: Boolean, default: true },
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
     active: { type: Boolean, default: true }
 }, {
     timestamps: true
