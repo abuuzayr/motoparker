@@ -121,7 +121,7 @@ export default {
 		this.mapbox = Mapbox;
 	},
 	async mounted() {
-		const response = await axios.get('/.netlify/functions/locations-get')
+		const response = await axios.get(process.env.VUE_APP_LOCATIONS_GET)
 		this.locations = response.data.locations
 	},
 };
