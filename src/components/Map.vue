@@ -12,10 +12,10 @@
 		<MglNavigationControl :showZoom="true" :showCompass="false" />
 		<MglGeolocateControl position="top-right" />
 		<MglMarker
-			v-for="marker in locations"
+			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
 			:draggable="false"
-			:color.sync="markerColor"
+			:color="getMarkerColor(marker)"
 			:markerId="marker._id"
 			:key="marker._id"
 			@click="markerClicked"
@@ -52,15 +52,34 @@ export default {
 			markerColor: 'blue',
 			counter: 0,
 			selectedMarker: null,
-			payload: [],
-			address: '',
 			locations: []
 		};
+	},
+	computed: {
+		filteredLocations: function () {
+			// filter active locations
+			let filtered = this.locations.filter(location => {
+				return location.active
+			})
+			// filter based on filters
+			// -> HDB
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('hdb') ? location.hdb : !location.hdb
+			})
+			// -> URA
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('ura') ? location.ura : !location.ura
+			})
+			// -> free
+			filtered = filtered.filter(location => {
+				return this.$store.state.filters.includes('free') ? location.free : !location.free
+			})
+			return filtered
+		}
 	},
 	methods: {
 		onMapLoaded(event) {
 			this.map = event.map;
-			this.addMarkers();
 		},
 		itemClicked(index) {
 			this.$refs['markers'][index].togglePopup();
@@ -75,29 +94,34 @@ export default {
 				this.map.panTo(this.$refs['markers'][index].coordinates);
 			});
 		},
-		addMarkers() {
-			this.payload = this.locations;
-		},
-		removeMarkers() {
-			this.payload = [];
-		},
 		async markerClicked(event) {
-			let markerId = event.component.$attrs.markerId
+			const markerId = event.component.$attrs.markerId
 			this.selectedMarker = markerId
 
 			this.$store.dispatch('setLocation', markerId)
 
-			let location = this.locations.filter(location => location._id === markerId)[0]
+			const location = this.locations.filter(location => location._id === markerId)[0]
 
-			await this.map.flyTo({ center: [location.lng, location.lat], zoom: 15 })
+			const currentZoom = this.map.getZoom()
+
+			await this.map.flyTo({ 
+				center: [location.lng, location.lat], 
+				zoom: currentZoom < 15 ? 15 : currentZoom
+			})
 		},
+		getMarkerColor(location) {
+			if (location.hdb) return 'var(--orange)'
+			if (location.ura) return 'var(--red)'
+			if (location.free) return 'var(--green)'
+			return this.markerColor
+		}
 	},
 	created() {
 		this.map = null;
 		this.mapbox = Mapbox;
 	},
 	async mounted() {
-		const response = await axios.get('/locations')
+		const response = await axios.get('/.netlify/functions/locations-get')
 		this.locations = response.data.locations
 	},
 };

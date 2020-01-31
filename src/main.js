@@ -10,14 +10,23 @@ Vue.use(VueSlideoutPanel);
 
 const store = new Vuex.Store({
   state: {
-    location: null
+    location: null,
+    filters: ['free']
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
+    addFilter: (state, filter) => state.filters = [...new Set([...state.filters, filter])],
+    removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter)
   },
   actions: {
     setLocation ({ commit }, location) {
       commit('setLocation', location)
+    },
+    addFilter({ commit }, filter) {
+      commit('addFilter', filter)
+    },
+    removeFilter({ commit }, filter) {
+      commit('removeFilter', filter)
     }
   }
 })

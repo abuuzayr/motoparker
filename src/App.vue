@@ -47,6 +47,9 @@ export default {
 body {
   margin: 0;
   --gray: #2c3e50;
+  --red: #e74c3c;
+  --green: #2ecc71;
+  --orange: #e67e22;
 }
 
 #app {
