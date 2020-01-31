@@ -35,6 +35,12 @@ const postLocation = async (req, res) => {
                     }
                 }
             )
+            if (newLocations.length === 0) {
+                res.status(200).send({
+                    'success': success.join(', '),
+                    'errors': errored.join(', ')
+                })
+            }
         }))
     } catch (e) {
         res.status(400).send("Error when saving to database");
