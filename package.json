@@ -48,6 +48,9 @@
       "parser": "babel-eslint"
     }
   },
+  "eslintIgnore": [
+    "src/lambda/"
+  ],
   "browserslist": [
     "> 1%",
     "last 2 versions"
