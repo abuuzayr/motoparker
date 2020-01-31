@@ -12,7 +12,7 @@ exports.handler = async (event, context, callback) => {
         const location = await Location.findById(event.queryStringParameters.id)
         callback(null, {
             statusCode: 200,
-            body: JSON.stringify({ 'locations': location })
+            body: JSON.stringify({ 'location': location })
         })
     } catch (err) {
         console.log('locations-get', err) // output to netlify function log
