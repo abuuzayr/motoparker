@@ -1,7 +1,7 @@
 <template>
   <header>
       <div class="left">
-        <font-awesome-icon icon="motorcycle" size="2x" class="icon"/>
+          <img src="../assets/logo.png" class="icon">
         <h2>Motoparker</h2>
       </div>
       <div class="right">
@@ -81,6 +81,7 @@ header .icon {
     color: var(--gray);
     margin: 0 10px;
     vertical-align: middle;
+    max-width: 30px;
 }
 
 header .left,
