@@ -1,7 +1,6 @@
 <template>
   <header>
       <div class="left">
-        <!-- <font-awesome-icon icon="motorcycle" size="2x" class="icon"/> -->
           <img src="../assets/logo.png" class="icon">
         <h2>Motoparker</h2>
       </div>
