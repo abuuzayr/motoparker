@@ -3,6 +3,7 @@
     <Header />
     <Map />
     <slideout-panel></slideout-panel>
+    <Footer />
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import Map from './components/Map.vue'
 import Header from './components/Header.vue'
 import Panel from './components/Panel.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'app',
   components: {
     Map,
-    Header
+    Header,
+    Footer
   },
   methods: {
     showPanel() {
