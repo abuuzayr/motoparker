@@ -34,7 +34,7 @@
           Sign in with Facebook
         </a>
         <a class="social-login google" 
-          href="https://motoparker-azure.builtforfifty.com/.auth/login/google?post_login_redirect_uri=https%3A%2F%2Fmotoparker.builtforfifty.com?logged-in=true">
+          :href="googleLogin">
           <font-awesome-icon :icon="['fab', 'google']" size="1x" class="icon"/>
           Sign in with Google
         </a>
