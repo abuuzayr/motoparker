@@ -13,12 +13,14 @@ Vue.use(VModal)
 const store = new Vuex.Store({
   state: {
     location: null,
-    filters: ['free']
+    filters: ['free'],
+    user: null
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
     addFilter: (state, filter) => state.filters = [...new Set([...state.filters, filter])],
-    removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter)
+    removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter),
+    setUser: (state, user) => state.user = user
   },
   actions: {
     setLocation ({ commit }, location) {
@@ -29,6 +31,9 @@ const store = new Vuex.Store({
     },
     removeFilter({ commit }, filter) {
       commit('removeFilter', filter)
+    },
+    setUser ({ commit }, user) {
+      commit('setUser', user)
     }
   }
 })
