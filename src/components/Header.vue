@@ -72,8 +72,7 @@ export default {
       filter: null,
       fbLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/facebook' + process.env.VUE_APP_POST_LOGIN_PATH,
       googleLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/google' + process.env.VUE_APP_POST_LOGIN_PATH,
-      logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH,
-      user: false
+      logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH
     }
   },
   methods: {
@@ -93,7 +92,12 @@ export default {
       },
   },
 	async mounted() {
-		this.user = await axios.get(`${process.env.VUE_APP_PRE_LOGIN_PATH}me`)
+    try {
+      const user = await axios.get(`${process.env.VUE_APP_PRE_LOGIN_PATH}me`)
+      this.$store.dispatch('setUser', user)
+    } catch (e) {
+      this.$store.dispatch('setUser', null)
+    }
   }
 }
 </script>
