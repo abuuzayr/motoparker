@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
-import 'mapbox-gl/dist/mapbox-gl.css';
-import VueSlideoutPanel from 'vue2-slideout-panel';
+import 'mapbox-gl/dist/mapbox-gl.css'
+import VueSlideoutPanel from 'vue2-slideout-panel'
+import VModal from 'vue-js-modal'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueSlideoutPanel);
+Vue.use(VModal)
 
 const store = new Vuex.Store({
   state: {
