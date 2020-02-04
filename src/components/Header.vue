@@ -14,8 +14,8 @@
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
-        <a href="#" class="login" v-on:click="login" v-if="!user">Sign In</a>
-        <a href="#" class="login logged-in" v-on:click="logout" v-else>{{user[0]['user_id']}}</a>
+        <a href="#" class="login" @click="login" v-if="!this.$store.state.user">Sign In</a>
+        <a href="#" class="login logged-in" @click="logout" v-else>{{this.$store.state.user['user_id']}}</a>
         <a href="https://github.com/abuuzayr/motoparker" target="_blank">
           <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
         </a>
@@ -29,12 +29,14 @@
       <div class="inner">
         <h3>Login to contribute</h3>
         <a class="social-login fb" 
-          :href="fbLogin">
+          :href="fbLogin"
+          rel="noreferrer noopener">
           <font-awesome-icon :icon="['fab', 'facebook-f']" size="1x" class="icon"/>
           Sign in with Facebook
         </a>
         <a class="social-login google" 
-          :href="googleLogin">
+          :href="googleLogin"
+          rel="noreferrer noopener">
           <font-awesome-icon :icon="['fab', 'google']" size="1x" class="icon"/>
           Sign in with Google
         </a>
@@ -72,7 +74,8 @@ export default {
       filter: null,
       fbLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/facebook' + process.env.VUE_APP_POST_LOGIN_PATH,
       googleLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/google' + process.env.VUE_APP_POST_LOGIN_PATH,
-      logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH
+      logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH,
+      authToken: false
     }
   },
   methods: {
@@ -92,9 +95,17 @@ export default {
       },
   },
 	async mounted() {
+    const url = new URL(window.location)
+    if (url.searchParams.get('logged-in') === 'true') {
+      if (url.hash && url.hash.includes('#token=')) {
+        this.authToken = JSON.parse(decodeURI(url.hash.split('#token=')[1]).replace(/%3A/g,':').replace(/%2C/g,',')).authenticationToken
+      }
+    }
     try {
-      const user = await axios.get(`${process.env.VUE_APP_PRE_LOGIN_PATH}me`)
-      this.$store.dispatch('setUser', user)
+      const response = await axios.get(`${process.env.VUE_APP_PRE_LOGIN_PATH}me`, {
+        headers: {'X-ZUMO-AUTH': this.authToken},
+      })
+      this.$store.dispatch('setUser', response && response.data && response.data[0])
     } catch (e) {
       this.$store.dispatch('setUser', null)
     }
