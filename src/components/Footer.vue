@@ -1,8 +1,8 @@
 <template>
   <footer>
     <div>
-      &copy; 2020 Muhammad Fawwaz - 
-      motorcycle icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a></div>
+      &copy; 2020 @abuuzayr - 
+      scooter icon by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> via <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a></div>
   </footer>
 </template>
 
@@ -25,11 +25,11 @@ footer {
   bottom: 0;
   margin: 0 auto;
   width: 100%;
-  font-size: 0.6rem;
+  font-size: 10px;
 }
 
 footer a {
-  color: #333 !important;
+  color: #333;
   text-decoration: none;
 }
 </style>
