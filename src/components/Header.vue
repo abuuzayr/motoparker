@@ -101,7 +101,12 @@ export default {
       },
       logout: function () {
         if (confirm('Do you want to log out?')) {
-          window.location = this.logoutPath
+          var a = document.createElement("a")
+          a.setAttribute("href", this.logoutPath)
+          a.style.display = "none"
+          a.rel = "noreferrer noopener"
+          document.body.appendChild(a)
+          a.click()
         }
       },
       addFilter: function (filter) {
