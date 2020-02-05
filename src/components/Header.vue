@@ -15,7 +15,7 @@
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
         <a href="#" class="login" @click="login" v-if="!this.$store.state.user">Sign In</a>
-        <a href="#" class="login logged-in" @click="logout" v-else>{{this.$store.state.user['user_id']}}</a>
+        <a href="#" class="login logged-in" @click="logout" v-else>{{name}}</a>
         <a href="https://github.com/abuuzayr/motoparker" target="_blank">
           <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
         </a>
@@ -76,6 +76,23 @@ export default {
       googleLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/google' + process.env.VUE_APP_POST_LOGIN_PATH,
       logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH,
       authToken: false
+    }
+  },
+  computed: {
+    name: function () {
+      if (this.$store.state.user) {
+        const { provider_name, user_claims, user_id } = this.$store.state.user
+        if (provider_name === 'facebook') {
+          return user_claims
+            .filter(claim => claim.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name')[0]
+            .val
+        }
+        if (provider_name === 'google') {
+          return user_claims.filter(claim => claim.typ === 'name')[0].val
+        }
+        return user_id
+      }
+      return false
     }
   },
   methods: {
