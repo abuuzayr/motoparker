@@ -15,7 +15,7 @@
         </tr>
       </table>
     </div>
-    <div v-else-if="info">
+    <div v-else-if="info" >
       <h2>
         {{ data.title }}
       </h2>
@@ -103,5 +103,10 @@ td:first-child {
 
 tr:first-child td {
   border-top: 1px solid;
+}
+
+p {
+  text-align: justify;
+  padding: 0 20px;
 }
 </style>
