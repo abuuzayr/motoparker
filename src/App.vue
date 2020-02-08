@@ -49,6 +49,10 @@ export default {
 
 <style>
 
+* {
+  outline: none;
+}
+
 body {
   margin: 0;
   --gray: #2c3e50;
