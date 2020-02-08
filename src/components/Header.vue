@@ -6,13 +6,13 @@
         <img src="../assets/sg.svg" class="icon flag">
       </div>
       <div class="right">
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('hdb')" v-if="this.$store.state.filters.includes('hdb')"/>
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon hdb" @click="removeFilter('hdb')" v-if="this.$store.state.filters.includes('hdb')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('hdb')" v-else/>
         HDB
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
         URA
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
+        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon free" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
         <a href="#" class="login" @click="login" v-if="!this.$store.state.user">Sign In</a>
@@ -235,6 +235,18 @@ header .right {
   -moz-box-shadow: 1px 1px 1px 0px rgba(200,200,200,1);
   box-shadow: 1px 1px 1px 0px rgba(200,200,200,1);
   width: 20px;
+}
+
+header .icon.hdb {
+  color: var(--orange);
+}
+
+header .icon.ura {
+  color: var(--red);
+}
+
+header .icon.free {
+  color: var(--green);
 }
 
 </style>
