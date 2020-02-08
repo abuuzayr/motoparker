@@ -22,23 +22,25 @@ export default {
   },
   methods: {
     showPanel() {
-    if (this.panelResult) {
-      this.panelResult.show();
+      const panelResult = this.$showPanel({
+          component : Panel,
+          openOn: 'right',
+          width: 400
+        })
 
-      return;
-    }
-
-    this.panelResult = this.$showPanel({
-        component : Panel,
-        openOn: 'right',
-        width: 400
-      })
+      panelResult.promise
+        .then(() => {
+          this.$store.dispatch('setLocation', null)
+          this.$store.dispatch('setInfo', '')
+        });
     }
   },
   mounted() {
     this.$store.subscribe((mutation) => {
-      if (mutation.type === 'setLocation') {
-        this.showPanel()
+      if (mutation.payload) {
+        if (mutation.type === 'setLocation' || mutation.type === 'setInfo') {
+          this.showPanel()
+        }
       }
     })
   }
