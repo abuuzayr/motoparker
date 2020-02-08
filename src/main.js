@@ -14,13 +14,15 @@ const store = new Vuex.Store({
   state: {
     location: null,
     filters: ['free'],
-    user: null
+    user: null,
+    info: ''
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
     addFilter: (state, filter) => state.filters = [...new Set([...state.filters, filter])],
     removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter),
-    setUser: (state, user) => state.user = user
+    setUser: (state, user) => state.user = user,
+    setInfo: (state, info) => state.info = info
   },
   actions: {
     setLocation ({ commit }, location) {
@@ -34,6 +36,9 @@ const store = new Vuex.Store({
     },
     setUser ({ commit }, user) {
       commit('setUser', user)
+    },
+    setInfo ({ commit }, info) {
+      commit('setInfo', info)
     }
   }
 })
