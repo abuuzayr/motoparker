@@ -121,6 +121,7 @@ export default {
       })
       const sortedObj = {}
       dataToShow.forEach(key => {
+        if (key === 'charges' && obj['free']) return
         sortedObj[key] = obj[key]
       })
       return sortedObj
