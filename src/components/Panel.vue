@@ -1,38 +1,54 @@
 <template>
-  <fragment v-if="data">
-    <div v-if="location">
-      <h2>
-        {{ data.name }}
-      </h2>
-      <table>
-        <tr v-for="(value, key) in filteredData" :key="key">
-          <td>
-            {{ key }}
-          </td>
-          <td>
-            {{ value }}
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div v-else-if="info" >
-      <h2>
-        {{ data.title }}
-      </h2>
-      <p v-html="data.content">
-      </p>
+  <fragment>
+    <font-awesome-icon :icon="['fas', 'arrow-left']" size="1x" class="close" @click="closePanel" />
+    <fragment v-if="data">
+      <div v-if="location">
+        <h2>
+          {{ data.name }}
+        </h2>
+        <table>
+          <tr v-for="(value, key) in filteredData" :key="key">
+            <td>
+              {{ key }}
+            </td>
+            <td>
+              {{ value }}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div v-else-if="info" >
+        <h2>
+          {{ data.title }}
+        </h2>
+        <p v-html="data.content">
+        </p>
+      </div>
+    </fragment>
+    <div v-else>
+      No data
     </div>
   </fragment>
-  <div v-else>
-    No data
-  </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import { Fragment } from 'vue-fragment'
 import Privacy from '../data/privacy.json'
 import Terms from '../data/terms.json'
+
+// Icons
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(
+  faArrowLeft
+)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const dataToShow = [
   'directions',
@@ -43,7 +59,8 @@ const dataToShow = [
 export default {
   name: 'Panel',
   components: {
-    Fragment
+    Fragment,
+    FontAwesomeIcon
   },
   data() {
     return {
@@ -53,6 +70,9 @@ export default {
     }
   },
   methods: {
+    closePanel() {
+      this.$emit('closePanel')
+    }
   },
   computed: {
     filteredData: function () {
@@ -108,5 +128,12 @@ tr:first-child td {
 p {
   text-align: justify;
   padding: 0 20px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
 }
 </style>
