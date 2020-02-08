@@ -3,6 +3,7 @@
       <div class="left">
           <img src="../assets/logo.png" class="icon">
         <h2>Motoparker</h2>
+        <img src="../assets/sg.svg" class="icon flag">
       </div>
       <div class="right">
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon" @click="removeFilter('hdb')" v-if="this.$store.state.filters.includes('hdb')"/>
@@ -227,6 +228,13 @@ header .right {
 .social-login .icon {
   color: #fff;
   vertical-align: middle;
+}
+
+.flag {
+  -webkit-box-shadow: 1px 1px 1px 0px rgba(200,200,200,1);
+  -moz-box-shadow: 1px 1px 1px 0px rgba(200,200,200,1);
+  box-shadow: 1px 1px 1px 0px rgba(200,200,200,1);
+  width: 20px;
 }
 
 </style>
