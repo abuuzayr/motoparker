@@ -27,14 +27,24 @@
             <strong>Last updated on:</strong> 
             {{ date }}
           </span>
-          <button class="edit" @click="edit" v-if="this.$store.state.user">
-            <font-awesome-icon :icon="['fas', 'pen']" size="xs" class="icon" />
-            edit this location
-          </button>
-          <button class="edit" @click="login" v-else>
-            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="s" class="icon" />
-            sign in to edit
-          </button>
+          <div v-if="!this.$store.state.edit">
+            <button class="edit" @click="edit" v-if="this.$store.state.user">
+              <font-awesome-icon :icon="['fas', 'pen']" size="xs" class="icon" />
+              edit this location
+            </button>
+            <button class="edit" @click="login" v-else>
+              <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="s" class="icon" />
+              sign in to edit
+            </button>
+          </div>
+          <div class="btns" v-else>
+            <button class="btn save" @click="save">
+              Save
+            </button>
+            <button class="btn cancel" @click="cancel">
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
       <div v-else-if="info" >
@@ -101,7 +111,13 @@ export default {
       this.$emit('closePanel')
     },
     edit() {
-      alert('editing!')
+      this.$store.dispatch('setEdit', true)
+    },
+    save() {
+      this.$store.dispatch('setEdit', false)
+    },
+    cancel() {
+      this.$store.dispatch('setEdit', false)
     },
     login() {
       this.$emit('closePanel')
@@ -203,5 +219,37 @@ p {
   cursor: pointer;
   display: block;
   margin: 10px 5px;
+}
+
+.btn {
+  padding: 5px 10px;
+  border: 1px solid;
+  margin: 5px 5px 5px 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btns {
+  margin-right: 5px;
+}
+
+.save {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.save:hover {
+  color: var(--green);
+  background: #fff;
+}
+
+.cancel {
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.cancel:hover {
+  color: var(--red);
+  background: #fff;
 }
 </style>
