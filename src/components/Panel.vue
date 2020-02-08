@@ -1,7 +1,14 @@
 <template>
   <fragment>
-    <div class="close" @click="closePanel">
-      <font-awesome-icon :icon="['fas', 'arrow-left']" size="1x" /> back
+    <div class="top-row">
+      <div class="close" @click="closePanel">
+        <font-awesome-icon :icon="['fas', 'arrow-left']" size="1x" /> back
+      </div>
+      <div class="labels">
+        <div class="label free" v-if="data.free">free</div>
+        <div class="label hdb" v-if="data.hdb">hdb</div>
+        <div class="label ura" v-if="data.ura">ura</div>
+      </div>
     </div>
     <fragment v-if="data">
       <div v-if="location">
@@ -88,9 +95,7 @@ const dataToShow = [
   'directions',
   'description',
   'charges',
-  'free',
-  'ura',
-  'hdb',
+  'free'
 ]
 
 export default {
@@ -137,6 +142,7 @@ export default {
       })
       const sortedObj = {}
       dataToShow.forEach(key => {
+        if (key === 'free') return
         if (key === 'charges' && obj['free']) return
         sortedObj[key] = obj[key]
       })
@@ -163,9 +169,8 @@ export default {
 h2 {
   line-height: 1.5rem;
   border-bottom: 1px solid var(--gray);
-  padding-bottom: 1.5rem;
-  padding-top: 5px;
-  clear: both;
+  padding-bottom: 1rem;
+  margin-top: 5px;
 }
 table {
   text-align: left;
@@ -194,11 +199,15 @@ p {
   padding: 0 20px;
 }
 
+.top-row {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
 .close {
-  display: block;
   padding: 10px;
   cursor: pointer;
-  float: left;
   font-size: 0.8rem;
 }
 
@@ -233,7 +242,8 @@ p {
   margin-right: 5px;
 }
 
-.save {
+.save,
+.label.free {
   border-color: var(--green);
   background: var(--green);
 }
@@ -243,7 +253,8 @@ p {
   background: #fff;
 }
 
-.cancel {
+.cancel,
+.label.ura {
   border-color: var(--red);
   background: var(--red);
 }
@@ -251,5 +262,25 @@ p {
 .cancel:hover {
   color: var(--red);
   background: #fff;
+}
+
+.labels {
+  margin: 5px 10px;
+}
+
+.label {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  margin-left: 3px;
+}
+
+.label.hdb {
+  border-color: var(--orange);
+  background: var(--orange);
 }
 </style>
