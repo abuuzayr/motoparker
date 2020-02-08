@@ -1,19 +1,28 @@
 <template>
-  <div v-if="data">
-    <h2>
-      {{ data.name }}
-    </h2>
-    <table>
-      <tr v-for="(value, key) in filteredData" :key="key">
-        <td>
-          {{ key }}
-        </td>
-        <td>
-          {{ value }}
-        </td>
-      </tr>
-    </table>
-  </div>
+  <fragment v-if="data">
+    <div v-if="location">
+      <h2>
+        {{ data.name }}
+      </h2>
+      <table>
+        <tr v-for="(value, key) in filteredData" :key="key">
+          <td>
+            {{ key }}
+          </td>
+          <td>
+            {{ value }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div v-else-if="info">
+      <h2>
+        {{ data.title }}
+      </h2>
+      <p v-html="data.content">
+      </p>
+    </div>
+  </fragment>
   <div v-else>
     No data
   </div>
@@ -21,6 +30,9 @@
 
 <script>
 import axios from 'axios'
+import { Fragment } from 'vue-fragment'
+import Privacy from '../data/privacy.json'
+import Terms from '../data/terms.json'
 
 const dataToShow = [
   'directions',
@@ -31,10 +43,12 @@ const dataToShow = [
 export default {
   name: 'Panel',
   components: {
+    Fragment
   },
   data() {
     return {
       location: this.$store.state.location,
+      info: this.$store.state.info,
       data: {}
     }
   },
@@ -56,6 +70,9 @@ export default {
       const response = await axios.get(`${process.env.VUE_APP_LOCATION_GET}&id=${this.location}`)
       this.data = response.data.location
     }
+    if (this.info) {
+      this.data = this.info === 'privacy' ? Privacy : Terms
+     }
   }
 }
 </script>
