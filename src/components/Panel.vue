@@ -294,9 +294,10 @@ textarea {
   width: 100%;
   border: none;
   background: var(--light-gray);
-  padding: 5px 10px;
+  padding: 10px;
   margin: -5px -10px -9px;
   height: 50px;
   font-size: 1rem;
+  resize: vertical;
 }
 </style>
