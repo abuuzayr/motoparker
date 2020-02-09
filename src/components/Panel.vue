@@ -122,13 +122,14 @@ export default {
     },
     edit() {
       this.$store.dispatch('setEdit', true)
-      this.originalData = this.data
+      this.originalData = { ...this.data }
     },
     save() {
       this.$store.dispatch('setEdit', false)
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
+      this.data = this.originalData
     },
     login() {
       this.$emit('closePanel')
