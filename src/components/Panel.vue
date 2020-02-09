@@ -126,18 +126,28 @@ export default {
     },
     async save() {
       this.$store.dispatch('setEdit', false)
-      const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
-        { 
-          ...this.data,
-          id: this.data._id
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
+      if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
+        const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
+          { 
+            ...this.data,
+            id: this.data._id
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
           }
+        )
+        if (response.status === 200) {
+          this.$toasted.show('Saved!', {
+            type: 'success'
+          })
+        } else {
+          this.$toasted.show('An error has occured, please try again later', {
+            type: 'error'
+          })
         }
-      )
-      if (response.status === 200) {
+      } else {
         this.$toasted.show('Saved!', {
           type: 'success'
         })
