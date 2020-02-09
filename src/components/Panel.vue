@@ -25,7 +25,12 @@
               <font-awesome-icon :icon="['fas', 'times']" size="1x" :style="{ 'color': 'var(--red)' }" v-else/>
             </td>
             <td v-else>
-              {{ value }}
+              <fragment v-if="$store.state.edit">
+                <textarea :value="value" @input="data[key] = $event.target.value"/>
+              </fragment>
+              <fragment v-else>
+                {{ value }}
+              </fragment>
             </td>
           </tr>
         </table>
@@ -117,6 +122,7 @@ export default {
     },
     edit() {
       this.$store.dispatch('setEdit', true)
+      this.originalData = this.data
     },
     save() {
       this.$store.dispatch('setEdit', false)
@@ -282,5 +288,15 @@ p {
 .label.hdb {
   border-color: var(--orange);
   background: var(--orange);
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  background: var(--light-gray);
+  padding: 5px 10px;
+  margin: -5px -10px -9px;
+  height: 50px;
+  font-size: 1rem;
 }
 </style>
