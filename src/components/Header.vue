@@ -128,7 +128,12 @@ export default {
       const response = await axios.get(`${process.env.VUE_APP_PRE_LOGIN_PATH}me`, {
         headers: {'X-ZUMO-AUTH': this.authToken},
       })
-      this.$store.dispatch('setUser', response && response.data && response.data[0])
+      if (response && response.data && response.data[0]) {
+        this.$store.dispatch('setUser', {
+          ...response.data[0],
+          authToken: this.authToken
+        })
+      }
     } catch (e) {
       this.$store.dispatch('setUser', null)
     }
