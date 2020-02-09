@@ -2,7 +2,11 @@
   <footer>
     <div>
       &copy; 2020 @abuuzayr - 
-      scooter icon by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> via <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a></div>
+      scooter icon by <a href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> 
+      via <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">Flaticon</a> 
+      <a href="#" @click="setInfo('privacy')"> - Privacy</a> 
+      <a href="#" @click="setInfo('terms')"> - Terms of Use</a>
+    </div>
   </footer>
 </template>
 
@@ -13,6 +17,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  methods: {
+    setInfo: function (info) {
+      this.$store.dispatch('setInfo', info)
     }
   }
 }
