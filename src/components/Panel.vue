@@ -124,8 +124,20 @@ export default {
       this.$store.dispatch('setEdit', true)
       this.originalData = { ...this.data }
     },
-    save() {
+    async save() {
       this.$store.dispatch('setEdit', false)
+      const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
+        { 
+          ...this.data,
+          id: this.data._id
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      console.log(response) // eslint-disable-line
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
