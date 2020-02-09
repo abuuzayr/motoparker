@@ -70,4 +70,11 @@ body {
   color: var(--gray);
   margin-top: 50px;
 }
+
+.toasted-container .toasted.toast {
+  font-family: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
+  padding: 0 20px;
+  min-height: 30px;
+}
+
 </style>

@@ -4,6 +4,7 @@ import App from './App.vue'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import VueSlideoutPanel from 'vue2-slideout-panel'
 import VModal from 'vue-js-modal'
+import Toasted from 'vue-toasted';
 
 // Load Inter typeface
 require('typeface-inter')
@@ -12,6 +13,12 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueSlideoutPanel);
 Vue.use(VModal)
+Vue.use(Toasted, {
+  position: 'top-center',
+  duration: 3000,
+  theme: 'toasted-primary',
+  className: 'toast'
+})
 
 const store = new Vuex.Store({
   state: {
