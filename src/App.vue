@@ -56,6 +56,7 @@ export default {
 body {
   margin: 0;
   --gray: #2c3e50;
+  --light-gray: #f0f1f6;
   --red: #e74c3c;
   --green: #2ecc71;
   --orange: #e67e22;
