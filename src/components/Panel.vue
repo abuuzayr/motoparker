@@ -40,14 +40,14 @@
             {{ date }}
           </span>
           <div v-if="!this.$store.state.edit">
-            <button class="edit" @click="edit" v-if="this.$store.state.user">
+            <a class="edit" @click="edit" v-if="this.$store.state.user">
               <font-awesome-icon :icon="['fas', 'pen']" size="xs" class="icon" />
               edit this location
-            </button>
-            <button class="edit" @click="login" v-else>
+            </a>
+            <a class="edit" @click="login" v-else>
               <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="s" class="icon" />
               sign in to edit
-            </button>
+            </a>
           </div>
           <div class="btns" v-else>
             <button class="btn save" @click="save">
@@ -127,23 +127,30 @@ export default {
     async save() {
       this.$store.dispatch('setEdit', false)
       if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
-        const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
-          { 
-            ...this.data,
-            id: this.data._id
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json'
+        try {
+          const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
+            { 
+              ...this.data,
+              id: this.data._id
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-ZUMO-AUTH': this.$store.state.user.authToken
+              }
             }
+          )
+          if (response.status === 200) {
+            this.$toasted.show('Saved!', {
+              type: 'success'
+            })
+          } else {
+            this.$toasted.show('An error has occured, please try again later', {
+              type: 'error'
+            })
           }
-        )
-        if (response.status === 200) {
-          this.$toasted.show('Saved!', {
-            type: 'success'
-          })
-        } else {
-          this.$toasted.show('An error has occured, please try again later', {
+        } catch (e) {
+          this.$toasted.show(`An error has occured: ${e}`, {
             type: 'error'
           })
         }
@@ -248,7 +255,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   padding-left: 10px;
 }
 
@@ -260,7 +267,7 @@ p {
   border: none;
   cursor: pointer;
   display: block;
-  margin: 10px 5px;
+  margin: 10px;
 }
 
 .btn {
