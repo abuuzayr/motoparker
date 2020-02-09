@@ -137,7 +137,11 @@ export default {
           }
         }
       )
-      console.log(response) // eslint-disable-line
+      if (response.status === 200) {
+        this.$toasted.show('Saved!', {
+          type: 'success'
+        })
+      }
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
