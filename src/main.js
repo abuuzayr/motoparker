@@ -5,6 +5,9 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import VueSlideoutPanel from 'vue2-slideout-panel'
 import VModal from 'vue-js-modal'
 
+// Load Inter typeface
+require('typeface-inter')
+
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(VueSlideoutPanel);
