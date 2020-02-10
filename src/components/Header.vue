@@ -1,23 +1,64 @@
 <template>
   <header>
-      <div class="left">
-          <img src="../assets/logo.png" class="icon">
-        <h2>Motoparker</h2>
-        <img src="../assets/sg.svg" class="icon flag">
-      </div>
-      <div class="right">
+    <div class="left">
+        <img src="../assets/logo.png" class="icon">
+      <h2>Motoparker</h2>
+      <img src="../assets/sg.svg" class="icon flag">
+    </div>
+    <div class="right">
+      <div class="mobile-hide">
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
         URA
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon free" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
-        <a href="#" class="login" @click="login" v-if="!this.$store.state.user">Sign In</a>
-        <a href="#" class="login logged-in" @click="logout" v-else>{{name}}</a>
-        <a href="https://github.com/abuuzayr/motoparker" target="_blank">
-          <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
+        <a href="#" class="login mobile-hide" @click="login" v-if="!this.$store.state.user">
+          <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+          Sign In
+        </a>
+        <a href="#" class="login logged-in" @click="logout" v-else>
+          {{name}}
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="md" class="icon" @click="logout" />
         </a>
       </div>
+      <font-awesome-icon :icon="['fas', 'bars']" size="lg" class="mobile-only icon" @click="showMenu" />
+      <a href="https://github.com/abuuzayr/motoparker" target="_blank">
+        <font-awesome-icon :icon="['fab', 'github']" size="2x" class="icon"/>
+      </a>
+    </div>
+    <modal 
+      name="menu"
+      transition="fade"
+      width="150"
+      height="auto"
+      :pivotY="pivotY"
+    >
+      <div class="menu">
+        <div>
+          <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
+          <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
+          URA
+        </div>
+        <div>
+          <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon free" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
+          <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
+          Free
+        </div>
+        <div v-if="!this.$store.state.user">
+          <a href="#" class="login" @click="login">
+            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+            Sign In
+          </a>
+        </div>
+        <div v-else>
+          <a href="#" class="login logged-in name" @click="logout">
+            <span>{{name}}</span>
+            <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="lg" class="icon" @click="logout" />
+          </a>
+        </div>
+      </div>
+    </modal>
     <modal 
       name="login" 
       transition="fade"
@@ -47,7 +88,14 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMotorcycle, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faMotorcycle,
+  faToggleOn,
+  faToggleOff,
+  faSignInAlt,
+  faSignOutAlt,
+  faBars
+} from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -57,7 +105,10 @@ library.add(
   faToggleOn,
   faToggleOff,
   faGoogle,
-  faFacebookF
+  faFacebookF,
+  faSignInAlt,
+  faSignOutAlt,
+  faBars
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -73,7 +124,8 @@ export default {
       fbLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/facebook' + process.env.VUE_APP_POST_LOGIN_PATH,
       googleLogin: process.env.VUE_APP_PRE_LOGIN_PATH + 'login/google' + process.env.VUE_APP_POST_LOGIN_PATH,
       logoutPath: process.env.VUE_APP_PRE_LOGIN_PATH + 'logout' + process.env.VUE_APP_POST_LOGOUT_PATH,
-      authToken: false
+      authToken: false,
+      menu: false
     }
   },
   computed: {
@@ -91,13 +143,16 @@ export default {
         return user_id
       }
       return false
+    },
+    pivotY: function () {
+      return 75 / window.innerHeight
     }
   },
   methods: {
-      login: function () {
+      login() {
           this.$modal.show('login')
       },
-      logout: function () {
+      logout() {
         if (confirm('Do you want to log out?')) {
           var a = document.createElement("a")
           a.setAttribute("href", this.logoutPath)
@@ -107,12 +162,15 @@ export default {
           a.click()
         }
       },
-      addFilter: function (filter) {
+      addFilter(filter) {
         this.$store.dispatch('addFilter', filter)
       },
-      removeFilter: function (filter) {
+      removeFilter(filter) {
         this.$store.dispatch('removeFilter', filter)
       },
+      showMenu() {
+          this.$modal.show('menu')
+      }
   },
 	async mounted() {
     const url = new URL(window.location)
@@ -189,6 +247,21 @@ header .right {
   border-left: none;
 }
 
+.login.logged-in .icon {
+  margin-left: 10px;
+  margin-right: 0;
+  color: var(--gray);
+}
+
+.login .icon {
+  color: #fff;
+  margin: 0 10px 0 0;
+}
+
+.login:hover .icon {
+  color: var(--gray);
+}
+
 .inner {
   padding: 0 20px 20px;
   text-align: center;
@@ -247,4 +320,65 @@ header .icon.free {
   color: var(--green);
 }
 
+.menu {
+  text-align: center;
+  height: 170px;
+}
+
+.menu > div {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.menu .login {
+  margin: 0;
+  color: var(--gray);
+  background: none;
+  padding: 10px;
+  border: none;
+  line-height: 32px;
+}
+
+.menu .login .icon {
+  color: var(--gray);
+}
+
+.menu .name span {
+  max-width: 80px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.menu .name .icon {
+  display: inline-block;
+}
+
+@media screen and (max-width: 599px) {
+  .mobile-hide {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+</style>
+
+<style>
+.v--modal-overlay[data-modal="menu"] {
+  background: transparent;
+}
+
+@media screen and (min-width: 600px) {
+  .v--modal-overlay[data-modal="menu"] {
+    display: none;
+  }
+}
 </style>
