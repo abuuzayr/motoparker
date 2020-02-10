@@ -6,9 +6,6 @@
         <img src="../assets/sg.svg" class="icon flag">
       </div>
       <div class="right">
-        <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon hdb" @click="removeFilter('hdb')" v-if="this.$store.state.filters.includes('hdb')"/>
-        <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('hdb')" v-else/>
-        HDB
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
         URA
@@ -242,12 +239,8 @@ header .right {
   width: 20px;
 }
 
-header .icon.hdb {
-  color: var(--orange);
-}
-
 header .icon.ura {
-  color: var(--red);
+  color: var(--orange);
 }
 
 header .icon.free {
