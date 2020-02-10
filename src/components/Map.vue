@@ -62,10 +62,6 @@ export default {
 				return location.active
 			})
 			// filter based on filters
-			// -> HDB
-			filtered = filtered.filter(location => {
-				return this.$store.state.filters.includes('hdb') ? location.hdb : !location.hdb
-			})
 			// -> URA
 			filtered = filtered.filter(location => {
 				return this.$store.state.filters.includes('ura') ? location.ura : !location.ura
@@ -110,8 +106,7 @@ export default {
 			})
 		},
 		getMarkerColor(location) {
-			if (location.hdb) return 'var(--orange)'
-			if (location.ura) return 'var(--red)'
+			if (location.ura) return 'var(--orange)'
 			if (location.free) return 'var(--green)'
 			return this.markerColor
 		}

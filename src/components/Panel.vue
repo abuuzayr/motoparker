@@ -6,7 +6,6 @@
       </div>
       <div class="labels">
         <div class="label free" v-if="data.free">free</div>
-        <div class="label hdb" v-if="data.hdb">hdb</div>
         <div class="label ura" v-if="data.ura">ura</div>
       </div>
     </div>
@@ -18,9 +17,9 @@
         <table>
           <tr v-for="(value, key) in filteredData" :key="key">
             <td>
-              {{ ['ura', 'hdb'].includes(key) ? key.toUpperCase() : capitalize(key) }}
+              {{ key === 'ura' ? key.toUpperCase() : capitalize(key) }}
             </td>
-            <td v-if="['ura', 'hdb', 'free'].includes(key)">
+            <td v-if="['ura', 'free'].includes(key)">
               <font-awesome-icon :icon="['fas', 'check']" size="1x" :style="{ 'color': 'var(--green)' }" v-if="value"/>
               <font-awesome-icon :icon="['fas', 'times']" size="1x" :style="{ 'color': 'var(--red)' }" v-else/>
             </td>
@@ -293,8 +292,7 @@ p {
   background: #fff;
 }
 
-.cancel,
-.label.ura {
+.cancel {
   border-color: var(--red);
   background: var(--red);
 }
@@ -319,7 +317,7 @@ p {
   margin-left: 3px;
 }
 
-.label.hdb {
+.label.ura {
   border-color: var(--orange);
   background: var(--orange);
 }
