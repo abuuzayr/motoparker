@@ -1,7 +1,15 @@
-SG MotoParker [![Netlify Status](https://api.netlify.com/api/v1/badges/b92f8145-72e2-449d-8dea-4d2bcb86b988/deploy-status)](https://app.netlify.com/sites/motoparker/deploys)
-===============
+<h1 align="center">
+    <img alt="Motoparker" title="Motoparker" src="https://github.com/abuuzayr/motoparker/blob/master/src/assets/logo.png" width="140"> </br>
+    <img src="https://github.com/abuuzayr/motoparker/blob/master/src/assets/sg.svg" alt="SG" width="30"> SG MotoParker
+</h1>
 
+<p align="center">
+    <a href="https://app.netlify.com/sites/motoparker/deploys" rel="nofollow" class="rich-diff-level-one"><img src="https://api.netlify.com/api/v1/badges/b92f8145-72e2-449d-8dea-4d2bcb86b988/deploy-status" alt="Netlify Status" style="max-width:100%;"></a>
+</p>
+
+<p align="center">
 Parking in Singapore can be expensive. But it can also be cheaper, or even free. And sometimes it can also be additionally expensive when you get a parking summons for illegal parking. As a motorcyclist myself, I don't always know which carparks can be parked at and sometimes there are locations where LTA or Traffic Police offers don't issue summons. 
+</p>
 
 This app serves to solve the following for my fellow motorcyclists:
 
@@ -25,6 +33,34 @@ Therefore while it _may_ be useful for other countries, it is most useful for Si
 #### Why can't we just use the current existing list of locations on other websites?
 
 Personally, when I found myself in situations where I needed to find locations near me to park my motorcycle, going through a list was not a very smart, quick or accurate approach. Further, I found that these lists were not regularly updated and as a regular visitor it was hard for me to update any information if they were outdated. 
+
+## Stack
+
+### Frontend & hosting
+
+:rocket: [Netlify](https://www.netlify.com/) for CI/CD, site previews and static site hosting
+
+:v: [Vue](https://vuejs.org/) for front end magic
+
+:vulcan_salute: [Vue CLI](https://cli.vuejs.org/) for project generation and development
+
+:world_map: [Mapbox](https://www.mapbox.com/) for serving maps and map design
+
+:cloud_with_lightning: [Cloudflare](https://www.cloudflare.com/) for DNS routing
+
+### Backend functions
+
+:zap: [Azure Functions](https://azure.microsoft.com/en-us/services/functions/) for serverless API
+
+:information_desk_person: [Azure App Service Authentication](https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization) for authentication and API protection
+
+:man_cartwheeling: [NodeJS](https://nodejs.org/) for function runtime language
+
+:left_right_arrow: [axios](https://github.com/axios/axios) for HTTP routing
+
+:file_cabinet: [MongoDB](https://www.mongodb.com/) for NoSQL database storage
+
+:file_folder: [Mongoose](https://mongoosejs.com/) for data modelling
 
 ## Contributing
 
@@ -59,3 +95,7 @@ If you find any issues with the app, please create an Issue in this repository a
 ## Contact
 
 My name is Muhammad and you may contact me at abu.uzayr@builtforfifty.com
+
+## Attributions
+
+Scooter icon by <a href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> via <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">Flaticon</a>
