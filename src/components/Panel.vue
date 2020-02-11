@@ -12,7 +12,7 @@
     <fragment v-if="data">
       <div v-if="location">
         <h2 v-if="$store.state.edit">
-          <input type="text" :value="data.name" @input="data.name = $event.target.value"/>
+          <input type="text" v-model="data.name"/>
         </h2>
         <h2 v-else>
           {{ data.name }}
@@ -28,11 +28,23 @@
             </td>
             <td v-else>
               <fragment v-if="$store.state.edit">
-                <textarea :value="value" @input="data[key] = $event.target.value"/>
+                <textarea v-model="data[key]" />
               </fragment>
               <fragment v-else>
                 {{ value }}
               </fragment>
+            </td>
+          </tr>
+          <tr v-if="$store.state.edit">
+            <td>URA</td>
+            <td>
+              <input type="checkbox" v-model="data.ura" />
+            </td>
+          </tr>
+          <tr v-if="$store.state.edit">
+            <td>Free</td>
+            <td>
+              <input type="checkbox" v-model="data.free" />
             </td>
           </tr>
         </table>
