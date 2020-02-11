@@ -57,18 +57,18 @@ export default {
 	},
 	computed: {
 		filteredLocations: function () {
-			// filter active locations
+			const filters = ['free', 'ura']
 			let filtered = this.locations.filter(location => {
-				return location.active
-			})
-			// filter based on filters
-			// -> URA
-			filtered = filtered.filter(location => {
-				return this.$store.state.filters.includes('ura') ? location.ura : !location.ura
-			})
-			// -> free
-			filtered = filtered.filter(location => {
-				return this.$store.state.filters.includes('free') ? location.free : !location.free
+				if (!location.active) return false
+				if (this.$store.state.filters.length) return true
+				let active = true
+				const activeFilters = filters.filter(f => {
+					return this.$store.state.filters.includes(f)
+				})
+				activeFilters.forEach(f => {
+					if (!location[f]) active = false
+				})
+				return active
 			})
 			return filtered
 		}
