@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <Header />
-    <Map />
+    <Map :locations="locations"/>
     <slideout-panel></slideout-panel>
     <Footer />
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import Map from './components/Map.vue'
 import Header from './components/Header.vue'
 import Panel from './components/Panel.vue'
@@ -19,6 +20,11 @@ export default {
     Map,
     Header,
     Footer
+  },
+  data() {
+    return {
+      locations: []
+    }
   },
   methods: {
     showPanel() {
@@ -32,10 +38,15 @@ export default {
         .then(() => {
           this.$store.dispatch('setLocation', null)
           this.$store.dispatch('setInfo', '')
+          this.getLocations()
         });
+    },
+    async getLocations() {
+      const response = await axios.get(process.env.VUE_APP_LOCATIONS_GET)
+      this.locations = response.data.locations
     }
   },
-  mounted() {
+  async mounted() {
     this.$store.subscribe((mutation) => {
       if (mutation.payload) {
         if (mutation.type === 'setLocation' || mutation.type === 'setInfo') {
@@ -43,6 +54,7 @@ export default {
         }
       }
     })
+    await this.getLocations()
   }
 }
 </script>

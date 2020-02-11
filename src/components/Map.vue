@@ -19,7 +19,6 @@
 			:markerId="marker._id"
 			:key="marker._id"
 			@click="markerClicked"
-			ref="markers"
 		>
 		</MglMarker>
     </MglMap>
@@ -34,7 +33,6 @@ import {
 	MglMarker,
 	MglGeolocateControl
 } from 'vue-mapbox'
-import axios from 'axios'
 
 export default {
 	components: {
@@ -43,6 +41,9 @@ export default {
 		MglMarker,
 		MglGeolocateControl
 	},
+	props: [
+		'locations'
+	],
 	data() {
 		return {
 			accessToken: process.env.VUE_APP_MAPBOX_ACCESS_TOKEN,
@@ -51,24 +52,23 @@ export default {
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
 			markerColor: 'blue',
 			counter: 0,
-			selectedMarker: null,
-			locations: []
+			selectedMarker: null
 		};
 	},
 	computed: {
 		filteredLocations: function () {
-			// filter active locations
+			const filters = ['free', 'ura']
 			let filtered = this.locations.filter(location => {
-				return location.active
-			})
-			// filter based on filters
-			// -> URA
-			filtered = filtered.filter(location => {
-				return this.$store.state.filters.includes('ura') ? location.ura : !location.ura
-			})
-			// -> free
-			filtered = filtered.filter(location => {
-				return this.$store.state.filters.includes('free') ? location.free : !location.free
+				if (!location.active) return false
+				if (!this.$store.state.filters.length) return true
+				let active = true
+				const activeFilters = filters.filter(f => {
+					return this.$store.state.filters.includes(f)
+				})
+				activeFilters.forEach(f => {
+					if (!location[f]) active = false
+				})
+				return active
 			})
 			return filtered
 		}
@@ -114,10 +114,6 @@ export default {
 	created() {
 		this.map = null;
 		this.mapbox = Mapbox;
-	},
-	async mounted() {
-		const response = await axios.get(process.env.VUE_APP_LOCATIONS_GET)
-		this.locations = response.data.locations
 	},
 };
 </script>
