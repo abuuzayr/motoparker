@@ -11,7 +11,10 @@
     </div>
     <fragment v-if="data">
       <div v-if="location">
-        <h2>
+        <h2 v-if="$store.state.edit">
+          <input type="text" :value="data.name" @input="data.name = $event.target.value"/>
+        </h2>
+        <h2 v-else>
           {{ data.name }}
         </h2>
         <table>
@@ -324,12 +327,23 @@ p {
 
 textarea {
   width: 100%;
-  border: none;
-  background: var(--light-gray);
-  padding: 10px;
   margin: -5px -10px -9px;
   height: 50px;
   font-size: 1rem;
   resize: vertical;
 }
+
+input[type="text"] {
+  width: calc(100% - 50px);
+  margin: 0 10px;
+  font-size: 1.5rem;
+}
+
+textarea,
+input[type="text"] {
+  background: var(--light-gray);;
+  padding: 10px;
+  border: none;
+}
+
 </style>
