@@ -14,7 +14,7 @@
 		<MglMarker
 			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
-			:draggable="false"
+			:draggable="$store.state.edit"
 			:color="getMarkerColor(marker)"
 			:markerId="marker._id"
 			:key="marker._id"
