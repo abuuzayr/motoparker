@@ -12,7 +12,7 @@
     <fragment v-if="data">
       <div v-if="location">
         <h2 v-if="$store.state.edit">
-          <input type="text" v-model="data.name"/>
+          <input type="text" v-model="data.name" :disabled="saving"/>
         </h2>
         <h2 v-else>
           {{ data.name }}
@@ -28,7 +28,7 @@
             </td>
             <td v-else>
               <fragment v-if="$store.state.edit">
-                <textarea v-model="data[key]" />
+                <textarea v-model="data[key]" :disabled="saving"/>
               </fragment>
               <fragment v-else>
                 {{ value }}
@@ -38,13 +38,13 @@
           <tr v-if="$store.state.edit">
             <td>URA</td>
             <td>
-              <input type="checkbox" v-model="data.ura" />
+              <input type="checkbox" v-model="data.ura" :disabled="saving"/>
             </td>
           </tr>
           <tr v-if="$store.state.edit">
             <td>Free</td>
             <td>
-              <input type="checkbox" v-model="data.free" />
+              <input type="checkbox" v-model="data.free" :disabled="saving"/>
             </td>
           </tr>
         </table>
@@ -64,10 +64,10 @@
             </a>
           </div>
           <div class="btns" v-else>
-            <button class="btn save" @click="save">
+            <button class="btn save" @click="save" :disabled="saving">
               Save
             </button>
-            <button class="btn cancel" @click="cancel">
+            <button class="btn cancel" @click="cancel" :disabled="saving">
               Cancel
             </button>
           </div>
@@ -126,7 +126,8 @@ export default {
   data() {
     return {
       location: this.$store.state.location,
-      info: this.$store.state.info
+      info: this.$store.state.info,
+      saving: false
     }
   },
   methods: {
@@ -138,8 +139,12 @@ export default {
       this.originalData = { ...this.data }
     },
     async save() {
-      this.$store.dispatch('setEdit', false)
+      this.$toasted.show('Saving...', {
+        type: 'info',
+        duration: null
+      })
       if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
+        this.saving = true
         try {
           const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
             { 
@@ -154,6 +159,7 @@ export default {
             }
           )
           if (response.status === 200) {
+            this.$toasted.clear()
             this.$toasted.show('Saved!', {
               type: 'success'
             })
@@ -163,15 +169,19 @@ export default {
             })
           }
         } catch (e) {
+          this.$toasted.clear()
           this.$toasted.show(`An error has occured: ${e}`, {
             type: 'error'
           })
         }
+        this.saving = false
       } else {
+        this.$toasted.clear()
         this.$toasted.show('Saved!', {
           type: 'success'
         })
       }
+      this.$store.dispatch('setEdit', false)
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
@@ -306,7 +316,7 @@ p {
   background: var(--green);
 }
 
-.save:hover {
+.save:not(:disabled):hover {
   color: var(--green);
   background: #fff;
 }
@@ -316,9 +326,15 @@ p {
   background: var(--red);
 }
 
-.cancel:hover {
+.cancel:not(:disabled):hover {
   color: var(--red);
   background: #fff;
+}
+
+.save:disabled,
+.cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .labels {
