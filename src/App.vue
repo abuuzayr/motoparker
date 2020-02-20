@@ -55,6 +55,11 @@ export default {
         }
       }
     })
+    this.$store.subscribeAction((action, state) => {
+      if (action.type === 'setEdit' && state.edit && !action.payload) {
+        this.getLocations()
+      }
+    })
     await this.getLocations()
   }
 }
