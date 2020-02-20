@@ -18,35 +18,27 @@
           {{ data.name }}
         </h2>
         <table>
-          <tr v-for="(value, key) in filteredData" :key="key">
-            <td>
-              {{ key === 'ura' ? key.toUpperCase() : capitalize(key) }}
-            </td>
-            <td v-if="['ura', 'free'].includes(key)">
-              <font-awesome-icon :icon="['fas', 'check']" size="1x" :style="{ 'color': 'var(--green)' }" v-if="value"/>
-              <font-awesome-icon :icon="['fas', 'times']" size="1x" :style="{ 'color': 'var(--red)' }" v-else/>
-            </td>
-            <td v-else>
-              <fragment v-if="$store.state.edit">
-                <textarea v-model="data[key]" :disabled="saving"/>
-              </fragment>
-              <fragment v-else>
+          <fragment v-for="(value, key) in filteredData" :key="key">
+            <tr v-if="$store.state.edit || value">
+              <td>
+                {{ capitalize(key) }}
+              </td>
+              <td v-if="$store.state.edit">
+                  <textarea v-model="data[key]" :disabled="saving"/>
+              </td>
+              <td v-else>
                 {{ value }}
-              </fragment>
-            </td>
-          </tr>
-          <tr v-if="$store.state.edit">
-            <td>URA</td>
-            <td>
-              <input type="checkbox" v-model="data.ura" :disabled="saving"/>
-            </td>
-          </tr>
-          <tr v-if="$store.state.edit">
-            <td>Free</td>
-            <td>
-              <input type="checkbox" v-model="data.free" :disabled="saving"/>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </fragment>
+          <fragment v-for="checkbox in ['ura', 'free']" :key="checkbox">
+            <tr v-if="$store.state.edit">
+              <td>{{ checkbox === 'ura' ? checkbox.toUpperCase() : capitalize(checkbox) }}</td>
+              <td>
+                <input type="checkbox" v-model="data[checkbox]" :disabled="saving"/>
+              </td>
+            </tr>
+          </fragment>
         </table>
         <div class="bottom">
           <span>
