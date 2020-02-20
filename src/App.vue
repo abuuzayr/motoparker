@@ -59,8 +59,10 @@ export default {
       if (action.type === 'setEdit') {
         if (state.edit && !action.payload) {
           this.getLocations()
+          this.toast.goAway(0)
         } else if (action.payload && !state.edit) {
           this.locations = this.locations.filter(location => location._id === this.$store.state.location)
+          this.toast = this.$toasted.global.dragToast()
         }
       }
     })
