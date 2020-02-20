@@ -50,7 +50,7 @@ export default {
   async mounted() {
     this.$store.subscribe((mutation) => {
       if (mutation.payload) {
-        if (mutation.type === 'setLocation' || mutation.type === 'setInfo') {
+        if (['setLocation', 'setInfo'].includes(mutation.type) && !this.$store.state.edit) {
           this.showPanel()
         }
       }
