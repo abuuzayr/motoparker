@@ -126,8 +126,7 @@ export default {
   data() {
     return {
       location: this.$store.state.location,
-      info: this.$store.state.info,
-      data: {}
+      info: this.$store.state.info
     }
   },
   methods: {
@@ -187,6 +186,12 @@ export default {
     }
   },
   computed: {
+    data: function () {
+      if (this.info) {
+        return this.info === 'privacy' ? Privacy : Terms
+      }
+      return this.$store.state.locationData
+    },
     filteredData: function () {
       const obj = {}
       Object.keys(this.data).map(key => {
@@ -210,11 +215,10 @@ export default {
   async mounted() {
     if (this.location) {
       const response = await axios.get(`${process.env.VUE_APP_LOCATION_GET}&id=${this.location}`)
-      this.data = response.data.location
+      if (response && response.data.location) {
+        this.$store.dispatch('setLocationData', response.data.location)
+      }
     }
-    if (this.info) {
-      this.data = this.info === 'privacy' ? Privacy : Terms
-     }
   }
 }
 </script>
