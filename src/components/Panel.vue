@@ -12,41 +12,33 @@
     <fragment v-if="data">
       <div v-if="location">
         <h2 v-if="$store.state.edit">
-          <input type="text" v-model="data.name"/>
+          <input type="text" v-model="data.name" :disabled="saving"/>
         </h2>
         <h2 v-else>
           {{ data.name }}
         </h2>
         <table>
-          <tr v-for="(value, key) in filteredData" :key="key">
-            <td>
-              {{ key === 'ura' ? key.toUpperCase() : capitalize(key) }}
-            </td>
-            <td v-if="['ura', 'free'].includes(key)">
-              <font-awesome-icon :icon="['fas', 'check']" size="1x" :style="{ 'color': 'var(--green)' }" v-if="value"/>
-              <font-awesome-icon :icon="['fas', 'times']" size="1x" :style="{ 'color': 'var(--red)' }" v-else/>
-            </td>
-            <td v-else>
-              <fragment v-if="$store.state.edit">
-                <textarea v-model="data[key]" />
-              </fragment>
-              <fragment v-else>
+          <fragment v-for="(value, key) in filteredData" :key="key">
+            <tr v-if="$store.state.edit || value">
+              <td>
+                {{ capitalize(key) }}
+              </td>
+              <td v-if="$store.state.edit">
+                  <textarea v-model="data[key]" :disabled="saving"/>
+              </td>
+              <td v-else>
                 {{ value }}
-              </fragment>
-            </td>
-          </tr>
-          <tr v-if="$store.state.edit">
-            <td>URA</td>
-            <td>
-              <input type="checkbox" v-model="data.ura" />
-            </td>
-          </tr>
-          <tr v-if="$store.state.edit">
-            <td>Free</td>
-            <td>
-              <input type="checkbox" v-model="data.free" />
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </fragment>
+          <fragment v-for="checkbox in ['ura', 'free']" :key="checkbox">
+            <tr v-if="$store.state.edit">
+              <td>{{ checkbox === 'ura' ? checkbox.toUpperCase() : capitalize(checkbox) }}</td>
+              <td>
+                <input type="checkbox" v-model="data[checkbox]" :disabled="saving"/>
+              </td>
+            </tr>
+          </fragment>
         </table>
         <div class="bottom">
           <span>
@@ -64,10 +56,10 @@
             </a>
           </div>
           <div class="btns" v-else>
-            <button class="btn save" @click="save">
+            <button class="btn save" @click="save" :disabled="saving">
               Save
             </button>
-            <button class="btn cancel" @click="cancel">
+            <button class="btn cancel" @click="cancel" :disabled="saving">
               Cancel
             </button>
           </div>
@@ -127,7 +119,7 @@ export default {
     return {
       location: this.$store.state.location,
       info: this.$store.state.info,
-      data: {}
+      saving: false
     }
   },
   methods: {
@@ -139,8 +131,9 @@ export default {
       this.originalData = { ...this.data }
     },
     async save() {
-      this.$store.dispatch('setEdit', false)
+      this.toast = this.$toasted.global.saving()
       if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
+        this.saving = true
         try {
           const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
             { 
@@ -155,28 +148,29 @@ export default {
             }
           )
           if (response.status === 200) {
-            this.$toasted.show('Saved!', {
-              type: 'success'
-            })
+            this.toast.goAway(0)
+            this.$toasted.global.saved()
           } else {
-            this.$toasted.show('An error has occured, please try again later', {
-              type: 'error'
+            this.$toasted.global.error({
+              message: 'An error has occured, please try again later'
             })
           }
         } catch (e) {
-          this.$toasted.show(`An error has occured: ${e}`, {
-            type: 'error'
+          this.toast.goAway(0)
+          this.$toasted.global.error({
+            message: `An error has occured: ${e}`
           })
         }
+        this.saving = false
       } else {
-        this.$toasted.show('Saved!', {
-          type: 'success'
-        })
+        this.toast.goAway(0)
+        this.$toasted.global.saved()
       }
+      this.$store.dispatch('setEdit', false)
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
-      this.data = this.originalData
+      this.$store.dispatch('setLocationData', this.originalData)
     },
     login() {
       this.$emit('closePanel')
@@ -187,6 +181,12 @@ export default {
     }
   },
   computed: {
+    data: function () {
+      if (this.info) {
+        return this.info === 'privacy' ? Privacy : Terms
+      }
+      return this.$store.state.locationData
+    },
     filteredData: function () {
       const obj = {}
       Object.keys(this.data).map(key => {
@@ -210,11 +210,10 @@ export default {
   async mounted() {
     if (this.location) {
       const response = await axios.get(`${process.env.VUE_APP_LOCATION_GET}&id=${this.location}`)
-      this.data = response.data.location
+      if (response && response.data.location) {
+        this.$store.dispatch('setLocationData', response.data.location)
+      }
     }
-    if (this.info) {
-      this.data = this.info === 'privacy' ? Privacy : Terms
-     }
   }
 }
 </script>
@@ -302,7 +301,7 @@ p {
   background: var(--green);
 }
 
-.save:hover {
+.save:not(:disabled):hover {
   color: var(--green);
   background: #fff;
 }
@@ -312,9 +311,15 @@ p {
   background: var(--red);
 }
 
-.cancel:hover {
+.cancel:not(:disabled):hover {
   color: var(--red);
   background: #fff;
+}
+
+.save:disabled,
+.cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .labels {
