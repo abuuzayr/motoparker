@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ editing: $store.state.edit }">
     <Header />
     <Map :locations="locations"/>
     <slideout-panel></slideout-panel>
@@ -38,6 +38,7 @@ export default {
         .then(() => {
           this.$store.dispatch('setLocation', null)
           this.$store.dispatch('setInfo', '')
+          this.$store.dispatch('setEdit', false)
           this.getLocations()
         });
     },
@@ -49,8 +50,19 @@ export default {
   async mounted() {
     this.$store.subscribe((mutation) => {
       if (mutation.payload) {
-        if (mutation.type === 'setLocation' || mutation.type === 'setInfo') {
+        if (['setLocation', 'setInfo'].includes(mutation.type) && !this.$store.state.edit) {
           this.showPanel()
+        }
+      }
+    })
+    this.$store.subscribeAction((action, state) => {
+      if (action.type === 'setEdit') {
+        if (state.edit && !action.payload) {
+          this.getLocations()
+          this.toast.goAway(0)
+        } else if (action.payload && !state.edit) {
+          this.locations = this.locations.filter(location => location._id === this.$store.state.location)
+          this.toast = this.$toasted.global.dragToast()
         }
       }
     })
@@ -87,6 +99,10 @@ body {
   font-family: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
   padding: 0 20px;
   min-height: 30px;
+}
+
+#app.editing .slideout-panel-bg {
+  display: none;
 }
 
 </style>

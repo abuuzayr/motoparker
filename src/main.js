@@ -20,9 +20,27 @@ Vue.use(Toasted, {
   className: 'toast'
 })
 
+// Register toasts
+Vue.toasted.register('saving', 'Saving...', {
+  type: 'info',
+  duration: null
+})
+Vue.toasted.register('dragToast', 'Drag marker to edit map location', {
+  type: 'info',
+  duration: null,
+  position: 'bottom-center'
+})
+Vue.toasted.register('error', 'message', {
+  type: 'error',
+})
+Vue.toasted.register('saved', 'Saved!', {
+  type: 'success'
+})
+
 const store = new Vuex.Store({
   state: {
     location: null,
+    locationData: {},
     filters: ['free'],
     user: null,
     info: '',
@@ -30,6 +48,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
+    setLocationData: (state, data) => state.locationData = data,
     addFilter: (state, filter) => state.filters = [...new Set([...state.filters, filter])],
     removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter),
     setUser: (state, user) => state.user = user,
@@ -39,6 +58,9 @@ const store = new Vuex.Store({
   actions: {
     setLocation ({ commit }, location) {
       commit('setLocation', location)
+    },
+    setLocationData({ commit }, data) {
+      commit('setLocationData', data)
     },
     addFilter({ commit }, filter) {
       commit('addFilter', filter)
