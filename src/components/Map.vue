@@ -19,6 +19,7 @@
 			:markerId="marker._id"
 			:key="marker._id"
 			@click="markerClicked"
+			@dragend="onDragend"
 		>
 		</MglMarker>
     </MglMap>
@@ -109,6 +110,14 @@ export default {
 			if (location.ura) return 'var(--orange)'
 			if (location.free) return 'var(--green)'
 			return this.markerColor
+		},
+		onDragend(payload) {
+			const { lng, lat } = payload.marker.getLngLat()
+			this.$store.dispatch('setLocationData', {
+				...this.$store.state.locationData,
+				lng,
+				lat
+			})
 		}
 	},
 	created() {
