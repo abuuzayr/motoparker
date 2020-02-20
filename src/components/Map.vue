@@ -9,8 +9,8 @@
 		:zoom="defaultZoom"
 		@load="onMapLoaded"
     >
-		<MglNavigationControl :showZoom="true" :showCompass="false" />
-		<MglGeolocateControl position="top-right" />
+		<MglNavigationControl :showZoom="true" :showCompass="false" position="top-left" />
+		<MglGeolocateControl position="top-left" />
 		<MglMarker
 			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
