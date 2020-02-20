@@ -175,7 +175,7 @@ export default {
     },
     cancel() {
       this.$store.dispatch('setEdit', false)
-      this.data = this.originalData
+      this.$store.dispatch('setLocationData', this.originalData)
     },
     login() {
       this.$emit('closePanel')
