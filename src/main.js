@@ -23,6 +23,7 @@ Vue.use(Toasted, {
 const store = new Vuex.Store({
   state: {
     location: null,
+    locationData: {},
     filters: ['free'],
     user: null,
     info: '',
@@ -30,6 +31,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     setLocation: (state, location) => state.location = location,
+    setLocationData: (state, data) => state.locationData = data,
     addFilter: (state, filter) => state.filters = [...new Set([...state.filters, filter])],
     removeFilter: (state, filter) => state.filters = state.filters.filter(f => f !== filter),
     setUser: (state, user) => state.user = user,
@@ -39,6 +41,9 @@ const store = new Vuex.Store({
   actions: {
     setLocation ({ commit }, location) {
       commit('setLocation', location)
+    },
+    setLocationData({ commit }, data) {
+      commit('setLocationData', data)
     },
     addFilter({ commit }, filter) {
       commit('addFilter', filter)
