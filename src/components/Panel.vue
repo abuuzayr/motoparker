@@ -139,10 +139,7 @@ export default {
       this.originalData = { ...this.data }
     },
     async save() {
-      this.$toasted.show('Saving...', {
-        type: 'info',
-        duration: null
-      })
+      this.toast = this.$toasted.global.saving()
       if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
         this.saving = true
         try {
@@ -159,27 +156,23 @@ export default {
             }
           )
           if (response.status === 200) {
-            this.$toasted.clear()
-            this.$toasted.show('Saved!', {
-              type: 'success'
-            })
+            this.toast.goAway(0)
+            this.$toasted.global.saved()
           } else {
-            this.$toasted.show('An error has occured, please try again later', {
-              type: 'error'
+            this.$toasted.global.error({
+              message: 'An error has occured, please try again later'
             })
           }
         } catch (e) {
-          this.$toasted.clear()
-          this.$toasted.show(`An error has occured: ${e}`, {
-            type: 'error'
+          this.toast.goAway(0)
+          this.$toasted.global.error({
+            message: `An error has occured: ${e}`
           })
         }
         this.saving = false
       } else {
-        this.$toasted.clear()
-        this.$toasted.show('Saved!', {
-          type: 'success'
-        })
+        this.toast.goAway(0)
+        this.$toasted.global.saved()
       }
       this.$store.dispatch('setEdit', false)
     },

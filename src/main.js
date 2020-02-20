@@ -20,6 +20,23 @@ Vue.use(Toasted, {
   className: 'toast'
 })
 
+// Register toasts
+Vue.toasted.register('saving', 'Saving...', {
+  type: 'info',
+  duration: null
+})
+Vue.toasted.register('dragToast', 'Drag marker to edit map location', {
+  type: 'info',
+  duration: null,
+  position: 'bottom-center'
+})
+Vue.toasted.register('error', 'message', {
+  type: 'error',
+})
+Vue.toasted.register('saved', 'Saved!', {
+  type: 'success'
+})
+
 const store = new Vuex.Store({
   state: {
     location: null,
