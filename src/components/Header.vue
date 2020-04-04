@@ -7,6 +7,10 @@
     </div>
     <div class="right">
       <div class="mobile-hide">
+        <div v-if="this.$store.state.user" @click="addLocation">
+          <font-awesome-icon :icon="['fas', 'plus']" size="1x" class="icon" />
+          Add
+        </div>
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
         URA
@@ -14,12 +18,12 @@
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
         <a href="#" class="login mobile-hide" @click="login" v-if="!this.$store.state.user">
-          <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+          <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="1x" class="icon" v-if="!this.$store.state.user" />
           Sign In
         </a>
         <a href="#" class="login logged-in" @click="logout" v-else>
           {{name}}
-          <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="md" class="icon" @click="logout" />
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="1x" class="icon" @click="logout" />
         </a>
       </div>
       <font-awesome-icon :icon="['fas', 'bars']" size="lg" class="mobile-only icon" @click="showMenu" />
@@ -47,7 +51,7 @@
         </div>
         <div v-if="!this.$store.state.user">
           <a href="#" class="login" @click="login">
-            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="1x" class="icon" v-if="!this.$store.state.user" />
             Sign In
           </a>
         </div>
@@ -94,7 +98,8 @@ import {
   faToggleOff,
   faSignInAlt,
   faSignOutAlt,
-  faBars
+  faBars,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -108,7 +113,8 @@ library.add(
   faFacebookF,
   faSignInAlt,
   faSignOutAlt,
-  faBars
+  faBars,
+  faPlus
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -170,6 +176,9 @@ export default {
       },
       showMenu() {
           this.$modal.show('menu')
+      },
+      addLocation() {
+        this.$store.dispatch('setEdit', 'new')
       }
   },
 	async mounted() {
@@ -222,6 +231,12 @@ header .left,
 header .right {
     display: flex;
     align-items: center;
+}
+
+header .right .mobile-hide > div {
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 5px;
 }
 
 .login {
