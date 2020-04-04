@@ -34,8 +34,10 @@ export default {
           width: 400
         })
 
+      // Called when panel is closed
       panelResult.promise
         .then(() => {
+          // Reset state & retrieve latest locations
           this.$store.dispatch('setLocation', null)
           this.$store.dispatch('setInfo', '')
           this.$store.dispatch('setEdit', false)
@@ -58,9 +60,12 @@ export default {
     this.$store.subscribeAction((action, state) => {
       if (action.type === 'setEdit') {
         if (state.edit && !action.payload) {
+          // if moving from editing state -> not editing
           this.getLocations()
           this.toast.goAway(0)
         } else if (action.payload && !state.edit) {
+          // if moving from not editing state -> editing
+          // show only one marker for the location we are editing
           this.locations = this.locations.filter(location => location._id === this.$store.state.location)
           this.toast = this.$toasted.global.dragToast()
         }
