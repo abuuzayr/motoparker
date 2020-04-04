@@ -53,13 +53,14 @@ export default {
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
 			markerColor: 'blue',
 			counter: 0,
-			selectedMarker: null
+			selectedMarker: null,
+			initialLocations: this.locations
 		};
 	},
 	computed: {
 		filteredLocations: function () {
 			const filters = ['free', 'ura']
-			let filtered = this.locations.filter(location => {
+			let filtered = this.initialLocations.filter(location => {
 				if (!location.active) return false
 				if (!this.$store.state.filters.length) return true
 				let active = true
@@ -97,7 +98,7 @@ export default {
 
 			this.$store.dispatch('setLocation', markerId)
 
-			const location = this.locations.filter(location => location._id === markerId)[0]
+			const location = this.initialLocations.filter(location => location._id === markerId)[0]
 
 			const currentZoom = this.map.getZoom()
 
