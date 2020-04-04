@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{ editing: $store.state.edit }">
     <Header />
-    <Map :locations="locations"/>
+    <Map :locations="locations" doubleClickZoom="true" />
     <slideout-panel></slideout-panel>
     <Footer />
   </div>
