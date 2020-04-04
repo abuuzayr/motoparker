@@ -57,6 +57,13 @@ export default {
 			initialLocations: this.locations
 		};
 	},
+	watch: {
+		locations: function () {
+			if (JSON.stringify(this.initialLocations) !== JSON.stringify(this.locations)) {
+				this.initialLocations = this.locations
+			}
+		}
+	},
 	computed: {
 		filteredLocations: function () {
 			const filters = ['free', 'ura']
