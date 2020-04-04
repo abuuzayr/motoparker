@@ -67,7 +67,7 @@ export default {
           // if moving from not editing state -> editing
           // show only one marker for the location we are editing
           this.locations = this.locations.filter(location => location._id === this.$store.state.location)
-          this.toast = this.$toasted.global.dragToast()
+          this.toast = action.payload === 'new' ? this.$toasted.global.newToast() : this.$toasted.global.dragToast()
         }
       }
     })
