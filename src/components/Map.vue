@@ -98,7 +98,7 @@ export default {
 
 			this.$store.dispatch('setLocation', markerId)
 
-			const location = this.initialLocations.filter(location => location._id === markerId)[0]
+			const location = this.initialLocations.find(location => location._id === markerId)
 
 			const currentZoom = this.map.getZoom()
 
