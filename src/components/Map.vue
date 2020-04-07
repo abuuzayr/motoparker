@@ -8,6 +8,7 @@
 		:center="mapCenter"
 		:zoom="defaultZoom"
 		@load="onMapLoaded"
+		@click="mapClick"
     >
 		<MglNavigationControl :showZoom="true" :showCompass="false" position="top-left" />
 		<MglGeolocateControl position="top-left" />
@@ -125,6 +126,14 @@ export default {
 				...this.$store.state.locationData,
 				lng,
 				lat
+			})
+		},
+		mapClick(e) {
+			if (this.$store.state.edit !== 'new') return
+			const { lng, lat } = e.mapboxEvent.lngLat
+			this.$store.dispatch('setLocationData', {
+				lng,
+				lat 
 			})
 		}
 	},
