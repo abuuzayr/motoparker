@@ -131,10 +131,12 @@ export default {
 		mapClick(e) {
 			if (this.$store.state.edit !== 'new') return
 			const { lng, lat } = e.mapboxEvent.lngLat
-			this.$store.dispatch('setLocationData', {
-				lng,
-				lat 
-			})
+			if (lng && lat) {
+				this.$store.dispatch('setLocationData', {
+					lng,
+					lat 
+				})
+			}
 		}
 	},
 	created() {
