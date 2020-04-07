@@ -1,7 +1,7 @@
 <template>
   <div class="map">
     <MglMap
-		class=""
+		v-bind:class="{'select-location': Object.keys(this.$store.state.locationData).length === 0 && this.$store.state.edit === 'new'}"
 		:accessToken="accessToken"
 		:mapStyle.sync="mapStyle"
 		:scrollZoom="false"
@@ -159,5 +159,8 @@ export default {
 }
 .mapboxgl-canvas {
 	left: 0;
+}
+.select-location .mapboxgl-canvas-container.mapboxgl-interactive {
+	cursor: pointer;
 }
 </style>
