@@ -70,6 +70,12 @@ export default {
           this.toast = action.payload === 'new' ? this.$toasted.global.newToast() : this.$toasted.global.dragToast()
         }
       }
+      if (action.type === 'setLocationData') {
+        if (state.edit === 'new' && Object.keys(state.locationData).length === 0) {
+          this.toast.goAway(0)
+          this.toast = this.$toasted.global.dragToast()
+        }
+      }
     })
     await this.getLocations()
   }
