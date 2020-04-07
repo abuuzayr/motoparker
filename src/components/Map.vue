@@ -128,13 +128,20 @@ export default {
 				lat
 			})
 		},
-		mapClick(e) {
+		async mapClick(e) {
 			if (this.$store.state.edit !== 'new') return
 			const { lng, lat } = e.mapboxEvent.lngLat
 			if (lng && lat) {
 				this.$store.dispatch('setLocationData', {
 					lng,
 					lat 
+				})
+
+				const currentZoom = this.map.getZoom()
+
+				await this.map.flyTo({ 
+					center: [lng, lat], 
+					zoom: currentZoom < 15 ? 15 : currentZoom
 				})
 			}
 		}
