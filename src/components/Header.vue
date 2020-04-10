@@ -7,7 +7,7 @@
     </div>
     <div class="right">
       <div class="mobile-hide">
-        <div v-if="this.$store.state.user" @click="addLocation">
+        <div @click="addLocation">
           <font-awesome-icon :icon="['fas', 'plus']" size="1x" class="icon" />
           Add
         </div>
@@ -178,7 +178,11 @@ export default {
           this.$modal.show('menu')
       },
       addLocation() {
-        this.$store.dispatch('setEdit', 'new')
+        if (this.$store.state.user) {
+          this.$store.dispatch('setEdit', 'new')
+        } else {
+          this.login()
+        }        
       }
   },
 	async mounted() {
