@@ -153,6 +153,9 @@ export default {
           if (response.status === 200) {
             this.toast.goAway(0)
             this.$toasted.global.saved()
+          } else if (response.status === 201) {
+            this.toast.goAway(0)
+            this.closePanel()
           } else {
             this.$toasted.global.error({
               message: 'An error has occured, please try again later'
