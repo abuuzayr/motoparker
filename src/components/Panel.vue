@@ -172,8 +172,12 @@ export default {
       this.$store.dispatch('setEdit', false)
     },
     cancel() {
-      this.$store.dispatch('setEdit', false)
-      this.$store.dispatch('setLocationData', this.originalData)
+      if (this.location) {
+        this.$store.dispatch('setEdit', false)
+        this.$store.dispatch('setLocationData', this.originalData)
+      } else {
+        this.closePanel()
+      }
     },
     login() {
       this.$emit('closePanel')
