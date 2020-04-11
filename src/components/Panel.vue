@@ -11,9 +11,12 @@
     </div>
     <fragment v-if="data">
       <div v-if="location || this.$store.state.edit === 'newEdit'">
-        <h2 v-if="$store.state.edit">
-          <input type="text" v-model="data.name" :disabled="saving"/>
-        </h2>
+        <div v-if="$store.state.edit">
+          <strong>Label</strong>
+          <h2>
+            <input type="text" v-model="data.name" :disabled="saving"/>
+          </h2>
+        </div>
         <h2 v-else>
           {{ data.name }}
         </h2>
