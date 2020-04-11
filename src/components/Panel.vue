@@ -19,7 +19,7 @@
         </h2>
         <table>
           <fragment v-for="(value, key) in filteredData" :key="key">
-            <tr v-if="$store.state.edit || value">
+            <tr>
               <td>
                 {{ capitalize(key) }}
               </td>
