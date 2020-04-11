@@ -44,10 +44,11 @@
           </fragment>
         </table>
         <div class="bottom">
-          <span>
+          <span v-if="date">
             <strong>Last updated on:</strong> 
             {{ date }}
           </span>
+          <span v-else></span>
           <div v-if="!this.$store.state.edit">
             <a class="edit" @click="edit" v-if="this.$store.state.user">
               <font-awesome-icon :icon="['fas', 'pen']" size="xs" class="icon" />
