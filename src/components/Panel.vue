@@ -10,7 +10,7 @@
       </div>
     </div>
     <fragment v-if="data">
-      <div v-if="location">
+      <div v-if="location || this.$store.state.edit === 'newEdit'">
         <h2 v-if="$store.state.edit">
           <input type="text" v-model="data.name" :disabled="saving"/>
         </h2>
