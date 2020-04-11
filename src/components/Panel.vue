@@ -188,17 +188,16 @@ export default {
       return this.$store.state.locationData
     },
     sortedData: function () {
-      const obj = {}
-      Object.keys(this.data).map(key => {
+      const obj = Object.keys(this.data).reduce((obj, key) => {
         if (dataToShow.includes(key)) {
           obj[key] = this.data[key]
         }
-      })
-      const sortedObj = {}
-      dataToShow.forEach(key => {
-        if (key === 'free') return
-        sortedObj[key] = obj[key]
-      })
+        return obj
+      }, {})
+      const sortedObj = dataToShow.reduce((sObj, key) => {
+        if (key !== 'free') sObj[key] = obj[key]
+        return sObj
+      }, {})
       return sortedObj
     },
     date: function () {
