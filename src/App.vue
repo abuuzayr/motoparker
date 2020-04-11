@@ -50,9 +50,11 @@ export default {
     }
   },
   async mounted() {
-    this.$store.subscribe((mutation) => {
+    this.$store.subscribe((mutation, state) => {
       if (mutation.payload) {
-        if (['setLocation', 'setInfo'].includes(mutation.type) && !this.$store.state.edit) {
+        if (['setLocation', 'setInfo'].includes(mutation.type) && !state.edit ||
+            mutation.type === 'setEdit' && state.edit === 'newEdit'
+          ) {
           this.showPanel()
         }
       }
