@@ -18,8 +18,8 @@
           {{ data.name }}
         </h2>
         <table>
-          <fragment v-for="(value, key) in filteredData" :key="key">
-            <tr>
+          <fragment v-for="(value, key) in sortedData" :key="key">
+            <tr v-show="key !== 'charges' || key === 'charges' && !data['free']">
               <td>
                 {{ capitalize(key) }}
               </td>
@@ -187,7 +187,7 @@ export default {
       }
       return this.$store.state.locationData
     },
-    filteredData: function () {
+    sortedData: function () {
       const obj = {}
       Object.keys(this.data).map(key => {
         if (dataToShow.includes(key)) {
@@ -197,7 +197,6 @@ export default {
       const sortedObj = {}
       dataToShow.forEach(key => {
         if (key === 'free') return
-        if (key === 'charges' && obj['free']) return
         sortedObj[key] = obj[key]
       })
       return sortedObj
