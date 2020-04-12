@@ -39,6 +39,7 @@ export default {
         .then(() => {
           // Reset state & retrieve latest locations
           this.$store.dispatch('setLocation', null)
+          this.$store.dispatch('setLocationData', {})
           this.$store.dispatch('setInfo', '')
           this.$store.dispatch('setEdit', false)
           this.getLocations()
