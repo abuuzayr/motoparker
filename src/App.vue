@@ -73,7 +73,7 @@ export default {
         }
       }
       if (action.type === 'setLocationData') {
-        if (state.edit === 'new' && Object.keys(state.locationData).length === 0) {
+        if (state.edit === 'newEdit' && Object.keys(state.locationData).length === 0) {
           this.toast.goAway(0)
           this.toast = this.$toasted.global.dragToast()
         }
