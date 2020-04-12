@@ -125,6 +125,12 @@ export default {
 		},
 		onDragend(payload) {
 			const { lng, lat } = payload.marker.getLngLat()
+			// update map
+			const currentMarker = this.initialLocations[0]
+			currentMarker['lat'] = lat
+			currentMarker['lng'] = lng
+			this.initialLocations = this.initialLocations.splice(0, 1, currentMarker)
+			// update location data which will be saved
 			this.$store.dispatch('setLocationData', {
 				...this.$store.state.locationData,
 				lng,
