@@ -70,6 +70,7 @@ export default {
 	},
 	computed: {
 		filteredLocations: function () {
+			if (this.$store.state.edit === 'newEdit') return this.initialLocations
 			const filters = ['free', 'ura']
 			let filtered = this.initialLocations.filter(location => {
 				if (!location.active) return false
