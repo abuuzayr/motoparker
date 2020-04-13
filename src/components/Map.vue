@@ -55,7 +55,7 @@ export default {
 			defaultZoom: 11,
 			mapCenter: [103.819839, 1.352083],
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
-			markerColor: 'blue',
+			markerColor: 'var(--blue)',
 			counter: 0,
 			selectedMarker: null,
 			initialLocations: this.locations
@@ -119,6 +119,7 @@ export default {
 			})
 		},
 		getMarkerColor(location) {
+			if (this.$store.state.edit === 'newEdit') return 'var(--yellow)'
 			if (location.ura) return 'var(--orange)'
 			if (location.free) return 'var(--green)'
 			return this.markerColor
