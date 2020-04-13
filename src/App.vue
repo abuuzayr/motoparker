@@ -121,4 +121,10 @@ body {
   display: none;
 }
 
+.slideout-panel .slideout-wrapper .slideout {
+  -webkit-box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
+  -moz-box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
+  box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
+}
+
 </style>
