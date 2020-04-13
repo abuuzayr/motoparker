@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{ editing: $store.state.edit }">
     <Header />
-    <Map :locations="locations"/>
+    <Map :locations="locations" doubleClickZoom="true" />
     <slideout-panel></slideout-panel>
     <Footer />
   </div>
@@ -34,9 +34,12 @@ export default {
           width: 400
         })
 
+      // Called when panel is closed
       panelResult.promise
         .then(() => {
+          // Reset state & retrieve latest locations
           this.$store.dispatch('setLocation', null)
+          this.$store.dispatch('setLocationData', {})
           this.$store.dispatch('setInfo', '')
           this.$store.dispatch('setEdit', false)
           this.getLocations()
@@ -48,9 +51,11 @@ export default {
     }
   },
   async mounted() {
-    this.$store.subscribe((mutation) => {
+    this.$store.subscribe((mutation, state) => {
       if (mutation.payload) {
-        if (['setLocation', 'setInfo'].includes(mutation.type) && !this.$store.state.edit) {
+        if (['setLocation', 'setInfo'].includes(mutation.type) && !state.edit ||
+            mutation.type === 'setEdit' && state.edit === 'newEdit'
+          ) {
           this.showPanel()
         }
       }
@@ -58,10 +63,19 @@ export default {
     this.$store.subscribeAction((action, state) => {
       if (action.type === 'setEdit') {
         if (state.edit && !action.payload) {
+          // if moving from editing state -> not editing
           this.getLocations()
           this.toast.goAway(0)
         } else if (action.payload && !state.edit) {
+          // if moving from not editing state -> editing
+          // show only one marker for the location we are editing
           this.locations = this.locations.filter(location => location._id === this.$store.state.location)
+          this.toast = action.payload === 'new' ? this.$toasted.global.newToast() : this.$toasted.global.dragToast()
+        }
+      }
+      if (action.type === 'setLocationData') {
+        if (state.edit === 'newEdit' && Object.keys(state.locationData).length === 0) {
+          this.toast.goAway(0)
           this.toast = this.$toasted.global.dragToast()
         }
       }
@@ -84,6 +98,8 @@ body {
   --red: #e74c3c;
   --green: #2ecc71;
   --orange: #e67e22;
+  --blue: #2980b9;
+  --yellow: #FFD700;
 }
 
 #app {
@@ -103,6 +119,12 @@ body {
 
 #app.editing .slideout-panel-bg {
   display: none;
+}
+
+.slideout-panel .slideout-wrapper .slideout {
+  -webkit-box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
+  -moz-box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
+  box-shadow: -5px 5px 10px -6px rgba(170,170,170,1);
 }
 
 </style>

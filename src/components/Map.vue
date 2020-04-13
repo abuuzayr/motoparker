@@ -1,20 +1,24 @@
 <template>
   <div class="map">
     <MglMap
-		class=""
+		v-bind:class="{'select-location': Object.keys(this.$store.state.locationData).length === 0 && this.$store.state.edit === 'new'}"
 		:accessToken="accessToken"
 		:mapStyle.sync="mapStyle"
 		:scrollZoom="false"
 		:center="mapCenter"
 		:zoom="defaultZoom"
 		@load="onMapLoaded"
+		@click="mapClick"
     >
 		<MglNavigationControl :showZoom="true" :showCompass="false" position="top-left" />
 		<MglGeolocateControl position="top-left" />
 		<MglMarker
 			v-for="marker in filteredLocations"
 			:coordinates="[marker.lng, marker.lat]"
-			:draggable="$store.state.edit && $store.state.location === marker._id"
+			:draggable="
+				($store.state.edit && $store.state.location === marker._id) 
+				|| ($store.state.edit && $store.state.edit.includes('new'))
+			"
 			:color="getMarkerColor(marker)"
 			:markerId="marker._id"
 			:key="marker._id"
@@ -51,15 +55,24 @@ export default {
 			defaultZoom: 11,
 			mapCenter: [103.819839, 1.352083],
 			mapStyle: 'mapbox://styles/mapbox/streets-v11',
-			markerColor: 'blue',
+			markerColor: 'var(--blue)',
 			counter: 0,
-			selectedMarker: null
+			selectedMarker: null,
+			initialLocations: this.locations
 		};
+	},
+	watch: {
+		locations: function () {
+			if (JSON.stringify(this.initialLocations) !== JSON.stringify(this.locations)) {
+				this.initialLocations = this.locations
+			}
+		}
 	},
 	computed: {
 		filteredLocations: function () {
+			if (this.$store.state.edit === 'newEdit') return this.initialLocations
 			const filters = ['free', 'ura']
-			let filtered = this.locations.filter(location => {
+			let filtered = this.initialLocations.filter(location => {
 				if (!location.active) return false
 				if (!this.$store.state.filters.length) return true
 				let active = true
@@ -97,7 +110,7 @@ export default {
 
 			this.$store.dispatch('setLocation', markerId)
 
-			const location = this.locations.filter(location => location._id === markerId)[0]
+			const location = this.initialLocations.find(location => location._id === markerId)
 
 			const currentZoom = this.map.getZoom()
 
@@ -107,17 +120,51 @@ export default {
 			})
 		},
 		getMarkerColor(location) {
+			if (this.$store.state.edit === 'newEdit') return 'var(--yellow)'
 			if (location.ura) return 'var(--orange)'
 			if (location.free) return 'var(--green)'
 			return this.markerColor
 		},
 		onDragend(payload) {
 			const { lng, lat } = payload.marker.getLngLat()
+			// update map
+			const currentMarker = this.initialLocations[0]
+			currentMarker['lat'] = lat
+			currentMarker['lng'] = lng
+			this.initialLocations = this.initialLocations.splice(0, 1, currentMarker)
+			// update location data which will be saved
 			this.$store.dispatch('setLocationData', {
 				...this.$store.state.locationData,
 				lng,
 				lat
 			})
+		},
+		async mapClick(e) {
+			if (this.$store.state.edit !== 'new') return
+			const { lng, lat } = e.mapboxEvent.lngLat
+			if (lng && lat) {
+				const currentZoom = this.map.getZoom()
+
+				await this.map.flyTo({ 
+					center: [lng, lat], 
+					zoom: currentZoom < 15 ? 15 : currentZoom
+				})
+
+				const location = {
+					lat,
+					lng,
+					active: true,
+					free: this.$store.state.filters.includes('free'),
+					ura: this.$store.state.filters.includes('ura'),
+				}
+
+				this.initialLocations = [location]
+				
+				this.$store.dispatch('setEdit', 'newEdit')
+
+				this.$store.dispatch('setLocationData', location)
+				
+			}
 		}
 	},
 	created() {
@@ -133,5 +180,8 @@ export default {
 }
 .mapboxgl-canvas {
 	left: 0;
+}
+.select-location .mapboxgl-canvas-container.mapboxgl-interactive {
+	cursor: pointer;
 }
 </style>

@@ -10,16 +10,19 @@
       </div>
     </div>
     <fragment v-if="data">
-      <div v-if="location">
-        <h2 v-if="$store.state.edit">
-          <input type="text" v-model="data.name" :disabled="saving"/>
-        </h2>
+      <div v-if="location || this.$store.state.edit === 'newEdit'">
+        <div v-if="$store.state.edit">
+          <strong>Label</strong>
+          <h2>
+            <input type="text" v-model="data.name" :disabled="saving"/>
+          </h2>
+        </div>
         <h2 v-else>
           {{ data.name }}
         </h2>
         <table>
-          <fragment v-for="(value, key) in filteredData" :key="key">
-            <tr v-if="$store.state.edit || value">
+          <fragment v-for="(value, key) in sortedData" :key="key">
+            <tr v-show="key !== 'charges' || key === 'charges' && !data['free']">
               <td>
                 {{ capitalize(key) }}
               </td>
@@ -41,10 +44,11 @@
           </fragment>
         </table>
         <div class="bottom">
-          <span>
+          <span v-if="date">
             <strong>Last updated on:</strong> 
             {{ date }}
           </span>
+          <span v-else></span>
           <div v-if="!this.$store.state.edit">
             <a class="edit" @click="edit" v-if="this.$store.state.user">
               <font-awesome-icon :icon="['fas', 'pen']" size="xs" class="icon" />
@@ -150,6 +154,9 @@ export default {
           if (response.status === 200) {
             this.toast.goAway(0)
             this.$toasted.global.saved()
+          } else if (response.status === 201) {
+            this.toast.goAway(0)
+            this.closePanel()
           } else {
             this.$toasted.global.error({
               message: 'An error has occured, please try again later'
@@ -169,8 +176,12 @@ export default {
       this.$store.dispatch('setEdit', false)
     },
     cancel() {
-      this.$store.dispatch('setEdit', false)
-      this.$store.dispatch('setLocationData', this.originalData)
+      if (this.location) {
+        this.$store.dispatch('setEdit', false)
+        this.$store.dispatch('setLocationData', this.originalData)
+      } else {
+        this.closePanel()
+      }
     },
     login() {
       this.$emit('closePanel')
@@ -187,19 +198,17 @@ export default {
       }
       return this.$store.state.locationData
     },
-    filteredData: function () {
-      const obj = {}
-      Object.keys(this.data).map(key => {
+    sortedData: function () {
+      const obj = Object.keys(this.data).reduce((obj, key) => {
         if (dataToShow.includes(key)) {
           obj[key] = this.data[key]
         }
-      })
-      const sortedObj = {}
-      dataToShow.forEach(key => {
-        if (key === 'free') return
-        if (key === 'charges' && obj['free']) return
-        sortedObj[key] = obj[key]
-      })
+        return obj
+      }, {})
+      const sortedObj = dataToShow.reduce((sObj, key) => {
+        if (key !== 'free') sObj[key] = obj[key]
+        return sObj
+      }, {})
       return sortedObj
     },
     date: function () {
