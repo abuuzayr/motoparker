@@ -99,6 +99,7 @@ body {
   --green: #2ecc71;
   --orange: #e67e22;
   --blue: #2980b9;
+  --yellow: #FFD700;
 }
 
 #app {
