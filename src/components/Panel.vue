@@ -43,7 +43,10 @@
             </tr>
           </fragment>
         </table>
-        <div class="DashboardContainer" v-show="!$store.state.edit"></div>
+        <div class="images">
+          <strong v-show="$store.state.edit || data.images && data.images.length">Images</strong>
+          <div class="DashboardContainer" v-show="$store.state.edit"></div>
+        </div>
         <div class="bottom">
           <span v-if="date">
             <strong>Last updated on:</strong> 
@@ -402,11 +405,15 @@ input[type="text"] {
   border: none;
 }
 
+.images {
+  margin-top: 5px;
+}
+
 </style>
 
 <style>
 .DashboardContainer .uppy-Dashboard-inner {
-  margin: 10px auto 5px;
+  margin: 5px auto;
 }
 
 .DashboardContainer .uppy-Dashboard-inner .uppy-DashboardAddFiles-info {
