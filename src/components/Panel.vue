@@ -43,6 +43,7 @@
             </tr>
           </fragment>
         </table>
+        <div class="DashboardContainer" v-show="!$store.state.edit"></div>
         <div class="bottom">
           <span v-if="date">
             <strong>Last updated on:</strong> 
@@ -89,6 +90,10 @@ import axios from 'axios'
 import { Fragment } from 'vue-fragment'
 import Privacy from '../data/privacy.json'
 import Terms from '../data/terms.json'
+import Uppy from '@uppy/core'
+import Dashboard from '@uppy/dashboard'
+import '@uppy/core/dist/style.min.css'
+import '@uppy/dashboard/dist/style.min.css'
 
 // Icons
 
@@ -223,6 +228,31 @@ export default {
         this.$store.dispatch('setLocationData', response.data.location)
       }
     }
+    // Uppy methods
+    const uppy = Uppy({
+      debug: true,
+      autoProceed: false,
+      restrictions: {
+        maxFileSize: 1000000,
+        maxNumberOfFiles: 3,
+        minNumberOfFiles: 1,
+        allowedFileTypes: ['image/*']
+      }
+    })
+    uppy.use(Dashboard, {
+      inline: true,
+      target: '.DashboardContainer',
+      replaceTargetContent: true,
+      showProgressDetails: true,
+      note: 'Images only, 1 - 3 files, up to 1 MB',
+      height: 200,
+      width: 'calc(100% - 20px)',
+      metaFields: [
+        { id: 'name', name: 'Name', placeholder: 'file name' },
+        { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
+      ],
+      browserBackButtonClose: true
+    })
   }
 }
 </script>
@@ -372,4 +402,21 @@ input[type="text"] {
   border: none;
 }
 
+</style>
+
+<style>
+.DashboardContainer .uppy-Dashboard-inner {
+  margin: 10px auto 5px;
+}
+
+.DashboardContainer .uppy-Dashboard-inner .uppy-DashboardAddFiles-info {
+  display: block;
+}
+
+.DashboardContainer .uppy-Dashboard-inner .uppy-DashboardAddFiles-info .uppy-Dashboard-poweredBy {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  left: 0;
+}
 </style>
