@@ -95,6 +95,7 @@ import Privacy from '../data/privacy.json'
 import Terms from '../data/terms.json'
 import Uppy from '@uppy/core'
 import Dashboard from '@uppy/dashboard'
+import XHRUpload from '@uppy/xhr-upload'
 import '@uppy/core/dist/style.min.css'
 import '@uppy/dashboard/dist/style.min.css'
 
@@ -255,6 +256,15 @@ export default {
         { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
       ],
       browserBackButtonClose: true
+    })
+    uppy.use(XHRUpload, {
+      endpoint: process.env.VUE_APP_IMG_ENDPOINT,
+      method: 'post',
+      formData: true,
+      fieldName: 'image',
+      headers: {
+        'Authorization': `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}`
+      }
     })
   }
 }
