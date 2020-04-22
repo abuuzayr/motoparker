@@ -132,7 +132,8 @@ export default {
     return {
       location: this.$store.state.location,
       info: this.$store.state.info,
-      saving: false
+      saving: false,
+      images: this.$store.state.location.images || []
     }
   },
   methods: {
@@ -145,12 +146,16 @@ export default {
     },
     async save() {
       this.toast = this.$toasted.global.saving()
-      if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
+      const dataWithImages = {
+        ...this.data,
+        images: this.images,
+      }
+      if (JSON.stringify(this.originalData) !== JSON.stringify(dataWithImages)) {
         this.saving = true
         try {
           const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
             { 
-              ...this.data,
+              ...dataWithImages,
               id: this.data._id
             },
             {
@@ -264,6 +269,11 @@ export default {
       fieldName: 'image',
       headers: {
         'Authorization': `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}`
+      }
+    })
+    uppy.on('upload-success', (file, response) => {
+      if (response.status === 200) {
+        this.images = [ ...this.images, response.body.data.link ]
       }
     })
   }
