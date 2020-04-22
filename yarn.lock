@@ -881,6 +881,13 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
+"@uppy/companion-client@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@uppy/companion-client/-/companion-client-1.4.2.tgz#affe4f056902251b572a493b4de57d1941040508"
+  integrity sha512-UBYvz0RZ7oBFHItpBSSXEok+gQRMKN4jz1kaDQt8UQbN/SFtdOghpeSH3LqHcqRZvZ6zq3JnCIHiM6sm3RCg7Q==
+  dependencies:
+    namespace-emitter "^2.0.1"
+
 "@uppy/core@^1.10.0":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@uppy/core/-/core-1.10.0.tgz#22e0d1f2c5404969f12151d487ead13e8ba214f2"
@@ -960,6 +967,22 @@
   integrity sha512-5e/MqHskTKe7pT5SV6aAaIkHedagEnECkxCAO4kRczEjHEaONuy3oa0RokLz9R2kM85jE/Tmov65UGUj3eIkcw==
   dependencies:
     lodash.throttle "^4.1.1"
+
+"@uppy/utils@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@uppy/utils/-/utils-2.4.2.tgz#7c5cf660e46b77a4192662e0329bc8d81d37efc7"
+  integrity sha512-iKe2NR/xRZ2t6TJZHseNlL4DpoXDLilv2nFf3LvAVgrZy/YP7kn/QHyQ5ikW1EdgOzm1IrbvRR29bztwYeWneg==
+  dependencies:
+    lodash.throttle "^4.1.1"
+
+"@uppy/xhr-upload@^1.5.8":
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/@uppy/xhr-upload/-/xhr-upload-1.5.8.tgz#90146b10b98d58405e1f6c25139f6d22054e5f43"
+  integrity sha512-ElMOlRPjIL/LeV6tFPpqhWKIaZWPElkGMCtcSEUwldy2cdX5adVie+SfwJzedeCtPWZQEP4sHmEbc6iqw4Cubw==
+  dependencies:
+    "@uppy/companion-client" "^1.4.2"
+    "@uppy/utils" "^2.4.2"
+    cuid "^2.1.1"
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.0.0":
   version "1.0.0"
