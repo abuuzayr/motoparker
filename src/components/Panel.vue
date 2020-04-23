@@ -44,7 +44,22 @@
           </fragment>
         </table>
         <div class="images">
-          <strong v-show="$store.state.edit || data.images && data.images.length">Images</strong>
+          <strong v-show="$store.state.edit">Images</strong>
+          <VueGallery 
+            :images="data.images" 
+            :index="galleryIndex" 
+            @close="galleryIndex = null" 
+            v-show="data.images && data.images.length">
+          </VueGallery>
+          <div class="gallery" v-show="data.images && data.images.length">
+            <div
+              class="image"
+              v-for="(image, imageIndex) in data.images"
+              :key="imageIndex"
+              @click="galleryIndex = imageIndex"
+              :style="{ backgroundImage: 'url(' + image + ')', width: '150px', height: '100px' }"
+            ></div>
+          </div>
           <div class="DashboardContainer" v-show="$store.state.edit"></div>
         </div>
         <div class="bottom">
@@ -93,11 +108,17 @@ import axios from 'axios'
 import { Fragment } from 'vue-fragment'
 import Privacy from '../data/privacy.json'
 import Terms from '../data/terms.json'
+
+// Uppy
 import Uppy from '@uppy/core'
 import Dashboard from '@uppy/dashboard'
 import XHRUpload from '@uppy/xhr-upload'
 import '@uppy/core/dist/style.min.css'
 import '@uppy/dashboard/dist/style.min.css'
+
+// Vue gallery
+import VueGallery from 'vue-gallery'
+import 'vue-gallery/'
 
 // Icons
 
@@ -126,14 +147,16 @@ export default {
   name: 'Panel',
   components: {
     Fragment,
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    VueGallery
   },
   data() {
     return {
       location: this.$store.state.location,
       info: this.$store.state.info,
       saving: false,
-      images: this.$store.state.location.images || []
+      images: this.$store.state.location.images || [],
+      galleryIndex: null
     }
   },
   methods: {
@@ -327,6 +350,7 @@ p {
 }
 
 .bottom {
+  clear: both;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -429,9 +453,26 @@ input[type="text"] {
   margin-top: 5px;
 }
 
+.image {
+  float: left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 1px solid #ebebeb;
+  margin: 5px;
+}
+
+.gallery {
+  margin: 5px 10px;
+}
+
 </style>
 
 <style>
+.DashboardContainer {
+  clear: both;
+}
+
 .DashboardContainer .uppy-Dashboard-inner {
   margin: 5px auto;
 }
