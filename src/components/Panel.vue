@@ -44,7 +44,6 @@
           </fragment>
         </table>
         <div class="images">
-          <strong v-show="$store.state.edit">Images</strong>
           <VueGallery 
             :images="data.images" 
             :index="galleryIndex" 
@@ -59,6 +58,9 @@
               @click="galleryIndex = imageIndex"
               :style="{ backgroundImage: 'url(' + image + ')', width: '150px', height: '100px' }"
             ></div>
+          </div>
+          <div v-show="$store.state.edit" style="clear: both;">
+            <strong>Add Images</strong>
           </div>
           <div class="DashboardContainer" v-show="$store.state.edit"></div>
         </div>
@@ -155,8 +157,8 @@ export default {
       location: this.$store.state.location,
       info: this.$store.state.info,
       saving: false,
-      images: this.$store.state.location.images || [],
-      galleryIndex: null
+      galleryIndex: null,
+      localImages: []
     }
   },
   methods: {
@@ -252,6 +254,14 @@ export default {
       if (!(this.data && this.data.updatedAt)) return false
       return new Date(this.data.updatedAt).toDateString()
     },
+    images: {
+      get: function () {
+        return this.localImages.length ? this.localImages : this.$store.state.locationData.images
+      },
+      set: function (images) {
+        this.localImages = images
+      }
+    }
   },
   async mounted() {
     if (this.location) {
