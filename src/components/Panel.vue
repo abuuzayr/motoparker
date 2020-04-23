@@ -45,15 +45,15 @@
         </table>
         <div class="images">
           <VueGallery 
-            :images="data.images" 
+            :images="images" 
             :index="galleryIndex" 
             @close="galleryIndex = null" 
-            v-show="data.images && data.images.length">
+            v-show="images && images.length">
           </VueGallery>
-          <div class="gallery" v-show="data.images && data.images.length">
+          <div class="gallery" v-show="images && images.length">
             <div
               class="image"
-              v-for="(image, imageIndex) in data.images"
+              v-for="(image, imageIndex) in images"
               :key="imageIndex"
               @click="galleryIndex = imageIndex"
               :style="{ backgroundImage: 'url(' + image + ')', width: '150px', height: '100px' }"
