@@ -39,6 +39,10 @@
       :pivotY="pivotY"
     >
       <div class="menu">
+        <div @click="addLocation">
+          <font-awesome-icon :icon="['fas', 'plus']" size="1x" class="icon" />
+          Add
+        </div>
         <div>
           <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
           <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
@@ -179,6 +183,7 @@ export default {
           this.$modal.show('menu')
       },
       addLocation() {
+        this.$modal.hide('menu')
         if (this.$store.state.user) {
           this.$store.dispatch('setEdit', 'new')
         } else {

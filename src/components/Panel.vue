@@ -20,6 +20,14 @@
         <h2 v-else>
           {{ data.name }}
         </h2>
+        <div class="btns" v-if="this.$store.state.edit">
+          <button class="btn save" @click="save" :disabled="saving">
+            Save
+          </button>
+          <button class="btn cancel" @click="cancel" :disabled="saving">
+            Cancel
+          </button>
+        </div>
         <table>
           <fragment v-for="(value, key) in sortedData" :key="key">
             <tr v-show="key !== 'charges' || key === 'charges' && !data['free']">
@@ -79,14 +87,6 @@
               <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="s" class="icon" />
               sign in to edit
             </a>
-          </div>
-          <div class="btns" v-else>
-            <button class="btn save" @click="save" :disabled="saving">
-              Save
-            </button>
-            <button class="btn cancel" @click="cancel" :disabled="saving">
-              Cancel
-            </button>
           </div>
         </div>
       </div>
@@ -318,7 +318,7 @@ export default {
 h2 {
   line-height: 1.5rem;
   border-bottom: 1px solid var(--gray);
-  padding-bottom: 1rem;
+  padding: 0 10px 1rem;
   margin-top: 5px;
 }
 table {
@@ -389,7 +389,8 @@ p {
 }
 
 .btns {
-  margin-right: 5px;
+  margin: -15px 5px 0 0;
+  float: right;
 }
 
 .save,
