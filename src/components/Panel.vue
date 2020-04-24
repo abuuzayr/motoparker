@@ -170,6 +170,7 @@ export default {
       this.originalData = { ...this.data }
     },
     async save() {
+      // TODO: Ensure that images are uploaded first 
       this.toast = this.$toasted.global.saving()
       const dataWithImages = {
         ...this.data,
@@ -275,7 +276,7 @@ export default {
       debug: true,
       autoProceed: false,
       restrictions: {
-        maxFileSize: 1000000,
+        maxFileSize: 5000000,
         maxNumberOfFiles: 3,
         minNumberOfFiles: 1,
         allowedFileTypes: ['image/*']
@@ -286,7 +287,7 @@ export default {
       target: '.DashboardContainer',
       replaceTargetContent: true,
       showProgressDetails: true,
-      note: 'Images only, 1 - 3 files, up to 1 MB',
+      note: 'Images only, 1 - 3 files, up to 5 MB',
       height: 200,
       width: 'calc(100% - 20px)',
       metaFields: [
