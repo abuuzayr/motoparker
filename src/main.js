@@ -30,7 +30,12 @@ Vue.toasted.register('dragToast', 'Drag marker to edit map location', {
   duration: null,
   position: 'bottom-center'
 })
-Vue.toasted.register('error', 'message', {
+Vue.toasted.register('newToast', 'Click on map to drop marker', {
+  type: 'default',
+  duration: null,
+  position: 'bottom-center'
+})
+Vue.toasted.register('error', p => p ? p.message : 'Error!', {
   type: 'error',
 })
 Vue.toasted.register('saved', 'Saved!', {

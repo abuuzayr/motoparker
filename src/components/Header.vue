@@ -7,6 +7,10 @@
     </div>
     <div class="right">
       <div class="mobile-hide">
+        <div @click="addLocation">
+          <font-awesome-icon :icon="['fas', 'plus']" size="1x" class="icon" />
+          Add
+        </div>
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon ura" @click="removeFilter('ura')" v-if="this.$store.state.filters.includes('ura')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('ura')" v-else/>
         URA
@@ -14,12 +18,12 @@
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
         Free
         <a href="#" class="login mobile-hide" @click="login" v-if="!this.$store.state.user">
-          <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+          <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="1x" class="icon" v-if="!this.$store.state.user" />
           Sign In
         </a>
         <a href="#" class="login logged-in" @click="logout" v-else>
           {{name}}
-          <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="md" class="icon" @click="logout" />
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="1x" class="icon" @click="logout" />
         </a>
       </div>
       <font-awesome-icon :icon="['fas', 'bars']" size="lg" class="mobile-only icon" @click="showMenu" />
@@ -47,7 +51,7 @@
         </div>
         <div v-if="!this.$store.state.user">
           <a href="#" class="login" @click="login">
-            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="md" class="icon" v-if="!this.$store.state.user" />
+            <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="1x" class="icon" v-if="!this.$store.state.user" />
             Sign In
           </a>
         </div>
@@ -79,6 +83,7 @@
           <font-awesome-icon :icon="['fab', 'google']" size="1x" class="icon"/>
           Sign in with Google
         </a>
+        <p>This step is only for spam protection. Only your name will appear on locations if you edit or create them.</p>
       </div>
     </modal>
   </header>
@@ -94,7 +99,8 @@ import {
   faToggleOff,
   faSignInAlt,
   faSignOutAlt,
-  faBars
+  faBars,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -108,7 +114,8 @@ library.add(
   faFacebookF,
   faSignInAlt,
   faSignOutAlt,
-  faBars
+  faBars,
+  faPlus
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -170,6 +177,13 @@ export default {
       },
       showMenu() {
           this.$modal.show('menu')
+      },
+      addLocation() {
+        if (this.$store.state.user) {
+          this.$store.dispatch('setEdit', 'new')
+        } else {
+          this.login()
+        }        
       }
   },
 	async mounted() {
@@ -224,6 +238,12 @@ header .right {
     align-items: center;
 }
 
+header .right .mobile-hide > div {
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
 .login {
   border: 2px solid var(--gray);
   padding: 3px 5px;
@@ -265,6 +285,10 @@ header .right {
 .inner {
   padding: 0 20px 20px;
   text-align: center;
+}
+
+.inner p {
+  font-size: 10px;
 }
 
 .social-login {
