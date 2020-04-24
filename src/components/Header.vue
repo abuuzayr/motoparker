@@ -351,7 +351,7 @@ header .icon.free {
 
 .menu {
   text-align: center;
-  height: 170px;
+  height: 200px;
 }
 
 .menu > div {
