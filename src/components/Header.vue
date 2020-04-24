@@ -83,6 +83,7 @@
           <font-awesome-icon :icon="['fab', 'google']" size="1x" class="icon"/>
           Sign in with Google
         </a>
+        <p>This step is only for spam protection. Only your name will appear on locations if you edit or create them.</p>
       </div>
     </modal>
   </header>
@@ -284,6 +285,10 @@ header .right .mobile-hide > div {
 .inner {
   padding: 0 20px 20px;
   text-align: center;
+}
+
+.inner p {
+  font-size: 10px;
 }
 
 .social-login {

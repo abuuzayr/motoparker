@@ -43,6 +43,27 @@
             </tr>
           </fragment>
         </table>
+        <div class="images">
+          <VueGallery 
+            :images="images" 
+            :index="galleryIndex" 
+            @close="galleryIndex = null" 
+            v-show="images && images.length">
+          </VueGallery>
+          <div class="gallery" v-show="images && images.length">
+            <div
+              class="image"
+              v-for="(image, imageIndex) in images"
+              :key="imageIndex"
+              @click="galleryIndex = imageIndex"
+              :style="{ backgroundImage: 'url(' + image + ')', width: '150px', height: '100px' }"
+            ></div>
+          </div>
+          <div v-show="$store.state.edit" style="clear: both;">
+            <strong>Add Images</strong>
+          </div>
+          <div class="DashboardContainer" v-show="$store.state.edit"></div>
+        </div>
         <div class="bottom">
           <span v-if="date">
             <strong>Last updated on:</strong> 
@@ -90,6 +111,17 @@ import { Fragment } from 'vue-fragment'
 import Privacy from '../data/privacy.json'
 import Terms from '../data/terms.json'
 
+// Uppy
+import Uppy from '@uppy/core'
+import Dashboard from '@uppy/dashboard'
+import XHRUpload from '@uppy/xhr-upload'
+import '@uppy/core/dist/style.min.css'
+import '@uppy/dashboard/dist/style.min.css'
+
+// Vue gallery
+import VueGallery from 'vue-gallery'
+import 'vue-gallery/'
+
 // Icons
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -117,13 +149,16 @@ export default {
   name: 'Panel',
   components: {
     Fragment,
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    VueGallery
   },
   data() {
     return {
       location: this.$store.state.location,
       info: this.$store.state.info,
-      saving: false
+      saving: false,
+      galleryIndex: null,
+      localImages: []
     }
   },
   methods: {
@@ -135,13 +170,18 @@ export default {
       this.originalData = { ...this.data }
     },
     async save() {
+      // TODO: Ensure that images are uploaded first 
       this.toast = this.$toasted.global.saving()
-      if (JSON.stringify(this.originalData) !== JSON.stringify(this.data)) {
+      const dataWithImages = {
+        ...this.data,
+        images: this.images,
+      }
+      if (JSON.stringify(this.originalData) !== JSON.stringify(dataWithImages)) {
         this.saving = true
         try {
           const response = await axios.post(`${process.env.VUE_APP_LOCATION_POST}`, 
             { 
-              ...this.data,
+              ...dataWithImages,
               id: this.data._id
             },
             {
@@ -215,6 +255,14 @@ export default {
       if (!(this.data && this.data.updatedAt)) return false
       return new Date(this.data.updatedAt).toDateString()
     },
+    images: {
+      get: function () {
+        return this.localImages.length ? this.localImages : this.$store.state.locationData.images
+      },
+      set: function (images) {
+        this.localImages = images
+      }
+    }
   },
   async mounted() {
     if (this.location) {
@@ -223,6 +271,45 @@ export default {
         this.$store.dispatch('setLocationData', response.data.location)
       }
     }
+    // Uppy methods
+    const uppy = Uppy({
+      debug: true,
+      autoProceed: false,
+      restrictions: {
+        maxFileSize: 5000000,
+        maxNumberOfFiles: 3,
+        minNumberOfFiles: 1,
+        allowedFileTypes: ['image/*']
+      }
+    })
+    uppy.use(Dashboard, {
+      inline: true,
+      target: '.DashboardContainer',
+      replaceTargetContent: true,
+      showProgressDetails: true,
+      note: 'Images only, 1 - 3 files, up to 5 MB',
+      height: 200,
+      width: 'calc(100% - 20px)',
+      metaFields: [
+        { id: 'name', name: 'Name', placeholder: 'file name' },
+        { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
+      ],
+      browserBackButtonClose: true
+    })
+    uppy.use(XHRUpload, {
+      endpoint: process.env.VUE_APP_IMG_ENDPOINT,
+      method: 'post',
+      formData: true,
+      fieldName: 'image',
+      headers: {
+        'Authorization': `Client-ID ${process.env.VUE_APP_IMGUR_CLIENT_ID}`
+      }
+    })
+    uppy.on('upload-success', (file, response) => {
+      if (response.status === 200) {
+        this.images = [ ...this.images, response.body.data.link ]
+      }
+    })
   }
 }
 </script>
@@ -274,6 +361,7 @@ p {
 }
 
 .bottom {
+  clear: both;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -372,4 +460,42 @@ input[type="text"] {
   border: none;
 }
 
+.images {
+  margin-top: 5px;
+}
+
+.image {
+  float: left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 1px solid #ebebeb;
+  margin: 5px;
+}
+
+.gallery {
+  margin: 5px 10px;
+}
+
+</style>
+
+<style>
+.DashboardContainer {
+  clear: both;
+}
+
+.DashboardContainer .uppy-Dashboard-inner {
+  margin: 5px auto;
+}
+
+.DashboardContainer .uppy-Dashboard-inner .uppy-DashboardAddFiles-info {
+  display: block;
+}
+
+.DashboardContainer .uppy-Dashboard-inner .uppy-DashboardAddFiles-info .uppy-Dashboard-poweredBy {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  left: 0;
+}
 </style>
