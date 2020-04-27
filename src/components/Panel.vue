@@ -257,7 +257,7 @@ export default {
     },
     images: {
       get: function () {
-        return this.localImages.length ? this.localImages : this.$store.state.locationData.images
+        return this.localImages.length ? this.localImages : this.$store.state.locationData.images || []
       },
       set: function (images) {
         this.localImages = images
