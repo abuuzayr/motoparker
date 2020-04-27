@@ -4,7 +4,6 @@
 		v-bind:class="{'select-location': Object.keys(this.$store.state.locationData).length === 0 && this.$store.state.edit === 'new'}"
 		:accessToken="accessToken"
 		:mapStyle.sync="mapStyle"
-		:scrollZoom="false"
 		:center="mapCenter"
 		:zoom="defaultZoom"
 		@load="onMapLoaded"
