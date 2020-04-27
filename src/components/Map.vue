@@ -70,17 +70,26 @@ export default {
 	computed: {
 		filteredLocations: function () {
 			if (this.$store.state.edit === 'newEdit') return this.initialLocations
-			const filters = ['free', 'ura']
+			const onlyFilters = ['free']
+			const showFilters = ['ura']
 			let filtered = this.initialLocations.filter(location => {
 				if (!location.active) return false
-				if (!this.$store.state.filters.length) return true
-				let active = true
-				const activeFilters = filters.filter(f => {
+				let active = false
+				const activeFilters = [...onlyFilters, ...showFilters].filter(f => {
 					return this.$store.state.filters.includes(f)
 				})
-				activeFilters.forEach(f => {
-					if (!location[f]) active = false
-				})
+				if (activeFilters.length) {
+					onlyFilters.forEach(f => {
+						if (activeFilters.includes(f) && location[f]) active = true
+					})
+					showFilters.forEach(f => {
+						if (activeFilters.includes(f)) active = true
+					})
+				} else {
+					showFilters.forEach(f => {
+						active = !location[f]
+					})
+				}
 				return active
 			})
 			return filtered
