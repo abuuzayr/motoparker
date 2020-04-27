@@ -16,7 +16,7 @@
         URA
         <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon free" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
         <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
-        Free
+        Only Free
         <a href="#" class="login mobile-hide" @click="login" v-if="!this.$store.state.user">
           <font-awesome-icon :icon="['fas', 'sign-in-alt']" size="1x" class="icon" v-if="!this.$store.state.user" />
           Sign In
@@ -51,7 +51,7 @@
         <div>
           <font-awesome-icon :icon="['fas', 'toggle-on']" size="2x" class="icon free" @click="removeFilter('free')" v-if="this.$store.state.filters.includes('free')"/>
           <font-awesome-icon :icon="['fas', 'toggle-off']" size="2x" class="icon" @click="addFilter('free')" v-else/>
-          Free
+          Only Free
         </div>
         <div v-if="!this.$store.state.user">
           <a href="#" class="login" @click="login">
@@ -174,6 +174,8 @@ export default {
         }
       },
       addFilter(filter) {
+        if (filter === 'ura') this.removeFilter('free')
+        if (filter === 'free') this.removeFilter('ura')
         this.$store.dispatch('addFilter', filter)
       },
       removeFilter(filter) {
