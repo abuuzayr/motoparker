@@ -46,7 +46,7 @@ const store = new Vuex.Store({
   state: {
     location: null,
     locationData: {},
-    filters: ['free'],
+    filters: [],
     user: null,
     info: '',
     edit: false
