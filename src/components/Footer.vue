@@ -1,7 +1,7 @@
 <template>
   <footer>
     <div>
-      &copy; 2020 @abuuzayr - 
+      &copy; 2020 <a href="https://abuuzayr.welovedevs.com/" title="Author link" target="_blank">@abuuzayr</a> - 
       scooter icon by <a href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> 
       via <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">Flaticon</a> 
       <a href="#" @click="setInfo('privacy')"> - Privacy</a> 
